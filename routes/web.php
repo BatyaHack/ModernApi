@@ -12,6 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('users');
+});
+
+Route::get('/field', function () {
+    return view('field');
 });
 

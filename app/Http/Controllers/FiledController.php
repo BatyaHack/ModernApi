@@ -20,7 +20,6 @@ class FiledController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function add(Request $request) {
-
         $test = $request->get('test');
         if($this->addColumn($test))
             return response()->json([], 201);
