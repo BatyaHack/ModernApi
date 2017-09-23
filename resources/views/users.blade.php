@@ -11,8 +11,12 @@
         </tbody>
     </table>
 
-@endsection()
+    <form action="#" id="userForm">
+    </form>
+    <input type="submit" id="submitButton">
 
+
+@endsection()
 
 <script>
 
@@ -23,6 +27,9 @@
         console.log(userTable);
         const userTableHead = userTable.firstElementChild;
         const userTableBody = userTable.lastElementChild;
+
+        const usersFrom = document.getElementById(`userForm`);
+        const submitButton = document.getElementById(`submitButton`);
 
         const a = function (item) {
             var arr = [];
@@ -53,7 +60,51 @@
 
         userTableHead.innerHTML = `<tr>${thead.join('')}<tr>`;
         userTableBody.innerHTML = `<tr>${body}<tr>`;
+
+
+        var inputFields = data.columns.map((elem, index, arr) => {
+                if(elem === `id`) {
+                    return '';
+                }
+                return `<input name=${elem} tupe=text>`;
+            });
+
+        // лучше не использовать +=
+        usersFrom.innerHTML += inputFields.join(``);
     });
+
+
+
+
+        // Логика отправки данных
+
+
+        submitButton.addEventListener(`click`, function (evt) {
+            evt.preventDefault();
+
+
+            var inp =  document.querySelectorAll("input"), form = {};
+
+            for(let i = 0; i<inp.length; i++){
+                form[`${inp[i].name}`] = inp[i].value;
+            }
+
+
+            return;
+
+            fetch('/api/field', {
+                method: `POST`,
+                body: dataFrom,
+                headers: {
+                    'Access-Control-Allow-Origin': `*`,
+                    'Content-Type': `application/json`,
+                },
+            })
+                .then((data) => {
+                console.log(data.json());
+        })
+
+        });
     }
 
 

@@ -9,7 +9,7 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::post('register', 'Auth\RegisterController@register'); // add new admin
     Route::post('logout', 'Auth\LoginController@logout'); // exit
-    Route::post('users', 'UserController@create'); // add new post
+    // добавление нового пользователя
     Route::put('users/{user}', 'UserController@update'); // edit post
     Route::delete('users/{user}', 'UserController@delete'); // delete post
 
@@ -17,6 +17,8 @@ Route::group(['middleware' => 'auth'], function (){
 
 
 });
+
+Route::post('users', 'UserController@create'); // add new post
 
 
 // Доступны всем
