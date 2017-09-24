@@ -18,7 +18,7 @@ Route::group(['middleware' => 'auth'], function (){
 
 });
 
-Route::post('users', 'UserController@create'); // add new post
+Route::post('users', 'UserController@store'); // add new post
 
 
 // Доступны всем

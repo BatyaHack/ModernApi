@@ -13,7 +13,7 @@
 
     <form action="#" id="userForm">
     </form>
-    <input type="submit" id="submitButton">
+    <button id="submitButton">Отправить</button>
 
 
 @endsection()
@@ -86,23 +86,25 @@
             var inp =  document.querySelectorAll("input"), form = {};
 
             for(let i = 0; i<inp.length; i++){
-                form[`${inp[i].name}`] = inp[i].value;
+                form[inp[i].name] = inp[i].value;
             }
 
+            console.log(JSON.stringify(form));
 
-            return;
-
-            fetch('/api/field', {
+            fetch('/api/users', {
                 method: `POST`,
-                body: dataFrom,
+                body: JSON.stringify(form),
                 headers: {
                     'Access-Control-Allow-Origin': `*`,
                     'Content-Type': `application/json`,
                 },
             })
                 .then((data) => {
-                console.log(data.json());
-        })
+                console.log(data.json())
+            })
+            .catch((err) => {
+                console.log(err);
+            })
 
         });
     }
