@@ -16,7 +16,12 @@ window.Vue = require('vue');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('user-table', require('./components/UserTable.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    users: [{name: `Oleg`, age: 30}
+    ],
 });
+
+console.log(123);

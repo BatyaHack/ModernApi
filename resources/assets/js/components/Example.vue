@@ -21,3 +21,9 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .panel-body {
+        color: red;
+    }
+</style>
