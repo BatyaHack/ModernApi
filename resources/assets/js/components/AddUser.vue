@@ -1,26 +1,71 @@
 <template>
-    <form action="/api/users" method="post">
+    <div>
+        <button @click="show = !show">Открыть</button>
 
-        <label>
-            <span></span>
-            <input type="text">
-        </label>
+        <transition name="fade">
 
-        <ul :inputs="fields">
-            <li v-for="input in inputs">{{input}}</li>
-        </ul>
+            <form action="/api/users" method="post" v-if="show">
 
-        <button>Добавить</button>
+                <label class="user-block" v-for="field in fields">
+                    <span class="user-block__label">{{field}}</span>
+                    <input class="user-block__input" type="text" :name="field">
+                </label>
 
-    </form>
+                <button @click.prevent="sendData">Добавить</button>
+            </form>
+
+        </transition>
+    </div>
 </template>
 
 <script>
     export default {
-        props: ['inputs'],
+        data: function () {
+            return {
+                show: false,
+                user: {},
+            }
+        },
+        props: ['fields'],
+        methods: {
+            sendData: function () {
+
+                const self = this.user;
+
+                const inputs = document.querySelectorAll('.user-block__input');
+                [...inputs].forEach((elem, index, arr) => {
+                    self[elem.name] = elem.value;
+                });
+
+                fetch('/api/users', {
+                    method: 'POST',
+                    body: JSON.stringify(this.user),
+                    headers: {
+                        'Access-Control-Allow-Origin': `*`,
+                        'Content-Type': `application/json`,
+                    }
+                })
+                    .then((data) => console.log('Дата отправлена'))
+                    .then(this.$emit('newUser', this.user))
+                    .catch((err) => console.log(err));
+            }
+        }
     }
 </script>
 
-<style>
+<style lang="scss">
+    .user-block {
+        display: flex;
+        justify-content: space-between;
+        width: 500px;
+        margin: 20px 0;
+    }
 
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0
+    }
 </style>

@@ -23,5 +23,4 @@ const app = new Vue({
     users: [{name: `Oleg`, age: 30}
     ],
 });
-
-console.log(123);
+console.log('here');
