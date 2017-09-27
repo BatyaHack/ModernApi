@@ -42571,7 +42571,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.users-table {\n  width: 100%;\n  border-spacing: 0;\n}\n.users-table__body {\n    border-left: none;\n    border-right: none;\n}\n.users-table__body td {\n      padding: 20px 0;\n      text-align: center;\n}\n.users-table__body tr {\n      cursor: pointer;\n      transition: all 0.3s;\n}\n.users-table__body tr:hover {\n        background-color: rgba(0, 0, 0, 0.3);\n}\n.users-table__body tr:nth-child(odd) {\n      background-color: rgba(0, 0, 0, 0.5);\n}\n.users-table__body tr:nth-child(odd):hover {\n        background-color: rgba(0, 0, 0, 0.3);\n}\n", ""]);
+exports.push([module.i, "\n.users-table {\n  width: 100%;\n  border-spacing: 0;\n}\n.users-table__head th {\n    text-align: center;\n}\n.users-table__body {\n    border-left: none;\n    border-right: none;\n}\n.users-table__body td {\n      padding: 20px 0;\n      text-align: center;\n}\n.users-table__body tr {\n      cursor: pointer;\n      transition: all 0.3s;\n}\n.users-table__body tr:hover {\n        background-color: rgba(0, 0, 0, 0.1);\n}\n.users-table__body tr:nth-child(odd) {\n      background-color: rgba(0, 0, 0, 0.2);\n}\n.users-table__body tr:nth-child(odd):hover {\n        background-color: rgba(0, 0, 0, 0.1);\n}\n", ""]);
 
 // exports
 
@@ -42584,6 +42584,10 @@ exports.push([module.i, "\n.users-table {\n  width: 100%;\n  border-spacing: 0;\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__AddUser_vue__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__AddUser_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__AddUser_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__UserCard_vue__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__UserCard_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__UserCard_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__UserFind_vue__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__UserFind_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__UserFind_vue__);
 //
 //
 //
@@ -42609,6 +42613,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
+
 
 
 
@@ -42616,7 +42625,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             users: null,
-            fields: null
+            fields: null,
+            currentUser: null
         };
     },
     created: function created() {
@@ -42631,11 +42641,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     components: {
-        UserForm: __WEBPACK_IMPORTED_MODULE_0__AddUser_vue___default.a
+        UserForm: __WEBPACK_IMPORTED_MODULE_0__AddUser_vue___default.a,
+        UserCard: __WEBPACK_IMPORTED_MODULE_1__UserCard_vue___default.a,
+        UserFind: __WEBPACK_IMPORTED_MODULE_2__UserFind_vue___default.a
     },
     methods: {
         renderNewUser: function renderNewUser(newUser) {
             this.users.push(newUser);
+        },
+        setCurrentUser: function setCurrentUser(evt) {
+            var curretID = evt.target.parentElement.children[0].innerText;
+
+            this.currentUser = this.users.find(function (elem, index, arr) {
+                if (elem.id == curretID) {
+                    return elem;
+                }
+            });
+        },
+        needleUsers: function needleUsers(_needleUsers) {
+            this.users = _needleUsers;
         }
     }
 });
@@ -42874,45 +42898,58 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container-fluid" }, [
-    _c(
-      "div",
-      { staticClass: "col-md-2" },
-      [
-        _c("user-form", {
-          attrs: { fields: _vm.fields },
-          on: { newUser: _vm.renderNewUser }
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-md-10" }, [
-      _c("table", { staticClass: "users-table" }, [
-        _c("thead", { staticClass: "users-table__head" }, [
-          _c(
-            "tr",
-            _vm._l(_vm.fields, function(field) {
-              return _c("th", [_vm._v(_vm._s(field))])
-            })
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          { staticClass: "users-table__body" },
-          _vm._l(_vm.users, function(user) {
-            return _c(
+  return _c(
+    "div",
+    { staticClass: "container-fluid" },
+    [
+      _c("user-find", {
+        attrs: { data: _vm.users },
+        on: { needleUsers: _vm.needleUsers }
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-md-2" },
+        [
+          _c("user-card", { attrs: { user: _vm.currentUser } }),
+          _vm._v(" "),
+          _c("user-form", {
+            attrs: { fields: _vm.fields },
+            on: { newUser: _vm.renderNewUser }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-10" }, [
+        _c("table", { staticClass: "users-table" }, [
+          _c("thead", { staticClass: "users-table__head" }, [
+            _c(
               "tr",
-              _vm._l(user, function(data) {
-                return _c("td", [_vm._v(_vm._s(data))])
+              _vm._l(_vm.fields, function(field) {
+                return _c("th", [_vm._v(_vm._s(field))])
               })
             )
-          })
-        )
+          ]),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            { staticClass: "users-table__body" },
+            _vm._l(_vm.users, function(user) {
+              return _c(
+                "tr",
+                { on: { click: _vm.setCurrentUser } },
+                _vm._l(user, function(data) {
+                  return _c("td", [_vm._v(_vm._s(data))])
+                })
+              )
+            })
+          )
+        ])
       ])
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -42929,6 +42966,344 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(65)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(67)
+/* template */
+var __vue_template__ = __webpack_require__(68)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\UserCard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] UserCard.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7d359e6e", Component.options)
+  } else {
+    hotAPI.reload("data-v-7d359e6e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(66);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("7941c7fc", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7d359e6e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UserCard.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7d359e6e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UserCard.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.user-class__info {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  margin: 3px 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        user: null
+    }
+});
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "user-class" },
+    [
+      _c("img", { attrs: { src: "", alt: "Фото пользователя" } }),
+      _vm._v(" "),
+      _vm._l(_vm.user, function(info, key) {
+        return _c("div", { staticClass: "user-class__info" }, [
+          _c("span", { staticClass: "user-class__key" }, [_vm._v(_vm._s(key))]),
+          _vm._v(" "),
+          _c("span", { staticClass: "user-class__info" }, [
+            _vm._v(_vm._s(info))
+          ])
+        ])
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-7d359e6e", module.exports)
+  }
+}
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(70)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(72)
+/* template */
+var __vue_template__ = __webpack_require__(73)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\UserFind.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] UserFind.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-55379c97", Component.options)
+  } else {
+    hotAPI.reload("data-v-55379c97", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(71);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("0f9f6df5", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55379c97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UserFind.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55379c97\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UserFind.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.user-input {\n  width: 100%;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            string: null
+        };
+    },
+    props: ['data'],
+    methods: {
+        getListUser: function getListUser(evt) {
+            var _this = this;
+
+            // проблема из за реактивной даты. Так как у меня дата обновляется и здесь!!!
+
+            var copyData = this.data.slice();
+            console.log(this.string);
+
+            if (this.string === '' || this.string === ' ') {
+                this.$emit('needleUsers', this.data);
+            }
+
+            var needleUsers = copyData.filter(function (elem, index, arr) {
+                // попробовать переписать это тройное условие на функцию
+                // в которую передается массив и там что то делается
+                if (elem.name.toLowerCase().includes('' + _this.string.toLowerCase()) || elem.surname.toLowerCase().includes('' + _this.string.toLowerCase()) || elem.patronymic.toLowerCase().includes('' + _this.string.toLowerCase())) {
+
+                    return elem;
+                }
+            });
+
+            this.$emit('needleUsers', needleUsers);
+        }
+    }
+});
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("input", {
+    directives: [
+      {
+        name: "model",
+        rawName: "v-model",
+        value: _vm.string,
+        expression: "string"
+      }
+    ],
+    staticClass: "user-input",
+    attrs: { type: "text", placeholder: "Find User ..." },
+    domProps: { value: _vm.string },
+    on: {
+      input: [
+        function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.string = $event.target.value
+        },
+        _vm.getListUser
+      ]
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-55379c97", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

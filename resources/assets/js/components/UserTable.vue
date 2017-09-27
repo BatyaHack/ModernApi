@@ -1,7 +1,10 @@
 <template>
     <div class="container-fluid">
 
+        <user-find :data = "users" @needleUsers = "needleUsers"></user-find>
+
         <div class="col-md-2">
+            <user-card :user = "currentUser"></user-card>
             <user-form :fields = "fields" @newUser="renderNewUser"></user-form>
         </div>
 
@@ -13,7 +16,7 @@
                 </tr>
                 </thead>
                 <tbody class = "users-table__body">
-                <tr v-for="user in users">
+                <tr v-for="user in users" @click="setCurrentUser">
                     <td v-for="data in user">{{data}}</td>
                 </tr>
                 </tbody>
@@ -25,12 +28,15 @@
 
 <script>
     import UserForm from './AddUser.vue';
+    import UserCard from './UserCard.vue';
+    import UserFind from './UserFind.vue';
 
     export default {
         data: function () {
             return {
                 users: null,
-                fields: null
+                fields: null,
+                currentUser: null,
             }
         },
         created() {
@@ -42,11 +48,25 @@
                 })
         },
         components: {
-            UserForm
+            UserForm,
+            UserCard,
+            UserFind
         },
         methods: {
             renderNewUser: function (newUser) {
                 this.users.push(newUser);
+            },
+            setCurrentUser: function (evt) {
+                const curretID = evt.target.parentElement.children[0].innerText;
+
+                this.currentUser = this.users.find((elem, index, arr) => {
+                   if(elem.id == curretID) {
+                       return elem;
+                   }
+                });
+            },
+            needleUsers: function (needleUsers) {
+                this.users = needleUsers;
             }
         }
     }
@@ -59,7 +79,9 @@
         border-spacing: 0;
 
         &__head {
-
+            th {
+                text-align: center;
+            }
         }
 
         &__body {
@@ -73,13 +95,13 @@
                 cursor: pointer;
                 transition: all 0.3s;
                 &:hover {
-                    background-color: rgba(0, 0, 0, 0.3);
+                    background-color: rgba(0, 0, 0, 0.1);
                 }
             }
             tr:nth-child(odd) {
-                background-color: rgba(0, 0, 0, 0.5);
+                background-color: rgba(0, 0, 0, 0.2);
                 &:hover {
-                    background-color: rgba(0, 0, 0, 0.3);
+                    background-color: rgba(0, 0, 0, 0.1);
                 }
             }
         }
