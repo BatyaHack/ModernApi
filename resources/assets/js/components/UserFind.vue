@@ -8,24 +8,20 @@
         data: function () {
             return {
                 string: null,
+                initData: null,
             }
         },
-        props: ['data'],
+        props: ['users'],
+        mounted: function() {
+            this.initData = this.users; // как ЭТО РАБОТАЕТ??? АААААА!!!
+        },
         methods: {
             getListUser: function (evt) {
 
-                // проблема из за реактивной даты. Так как у меня дата обновляется и здесь!!!
+                console.log(this.initData);
 
-                const copyData = this.data.slice();
-                console.log(this.string);
+                const needleUsers = this.users.filter((elem, index, arr) => {
 
-                if (this.string === '' || this.string === ' ') {
-                    this.$emit('needleUsers', this.data);
-                }
-
-                const needleUsers = copyData.filter((elem, index, arr) => {
-                    // попробовать переписать это тройное условие на функцию
-                    // в которую передается массив и там что то делается
                     if( elem.name.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
                         elem.surname.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
                         elem.patronymic.toLowerCase().includes(`${this.string.toLowerCase()}`)) {
@@ -35,7 +31,13 @@
                     }
                 });
 
-                this.$emit('needleUsers', needleUsers);
+                if(needleUsers.length !== 0) {
+                    this.$emit('needleUsers', needleUsers);
+                }
+
+                if(!this.string) {
+                    this.$emit('needleUsers', this.initData);
+                }
 
             }
         }

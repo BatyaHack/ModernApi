@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
 
-        <user-find :data = "users" @needleUsers = "needleUsers"></user-find>
+        <user-find :users = "users" @needleUsers = "needleUsers" v-if="showFind"></user-find>
 
         <div class="col-md-2">
             <user-card :user = "currentUser"></user-card>
@@ -37,14 +37,16 @@
                 users: null,
                 fields: null,
                 currentUser: null,
+                showFind: false,
             }
         },
-        created() {
+        beforeCreate() {
             fetch('/api/users')
                 .then( (data) => data.json() )
                 .then( (data) => {
                     this.fields = data.columns;
                     this.users = data[0];
+                    this.showFind = true;
                 })
         },
         components: {
