@@ -9,36 +9,42 @@
             return {
                 string: null,
                 initData: null,
+                oldLength: null,
             }
         },
         props: ['users'],
-        mounted: function() {
-            this.initData = this.users; // как ЭТО РАБОТАЕТ??? АААААА!!!
+        mounted: function () {
+            this.initData = this.users;
         },
         methods: {
+            getData: function () {
+                Object.assign(this.users, this.initData);
+            },
             getListUser: function (evt) {
 
-                console.log(this.initData);
+                const throttling = setTimeout(() => {
 
-                const needleUsers = this.users.filter((elem, index, arr) => {
+                    clearTimeout(throttling);
 
-                    if( elem.name.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
-                        elem.surname.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
-                        elem.patronymic.toLowerCase().includes(`${this.string.toLowerCase()}`)) {
-
-                        return elem;
-
+                    if (this.oldLength > this.string.length) {
+                        this.getData();
                     }
-                });
 
-                if(needleUsers.length !== 0) {
+                    const needleUsers = this.users.filter((elem, index, arr) => {
+
+                        if (elem.name.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
+                            elem.surname.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
+                            elem.patronymic.toLowerCase().includes(`${this.string.toLowerCase()}`)) {
+
+                            return elem;
+
+                        }
+                    });
+
                     this.$emit('needleUsers', needleUsers);
-                }
 
-                if(!this.string) {
-                    this.$emit('needleUsers', this.initData);
-                }
-
+                    this.oldLength = this.string.length;
+                }, 300);
             }
         }
     }

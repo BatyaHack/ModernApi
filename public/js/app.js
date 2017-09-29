@@ -43149,34 +43149,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             string: null,
-            initData: null
+            initData: null,
+            oldLength: null
         };
     },
     props: ['users'],
     mounted: function mounted() {
-        this.initData = this.users; // как ЭТО РАБОТАЕТ??? АААААА!!!
+        this.initData = this.users;
     },
     methods: {
+        getData: function getData() {
+            Object.assign(this.users, this.initData);
+        },
         getListUser: function getListUser(evt) {
             var _this = this;
 
-            console.log(this.initData);
+            var throttling = setTimeout(function () {
 
-            var needleUsers = this.users.filter(function (elem, index, arr) {
+                clearTimeout(throttling);
 
-                if (elem.name.toLowerCase().includes('' + _this.string.toLowerCase()) || elem.surname.toLowerCase().includes('' + _this.string.toLowerCase()) || elem.patronymic.toLowerCase().includes('' + _this.string.toLowerCase())) {
-
-                    return elem;
+                if (_this.oldLength > _this.string.length) {
+                    _this.getData();
                 }
-            });
 
-            if (needleUsers.length !== 0) {
-                this.$emit('needleUsers', needleUsers);
-            }
+                var needleUsers = _this.users.filter(function (elem, index, arr) {
 
-            if (!this.string) {
-                this.$emit('needleUsers', this.initData);
-            }
+                    if (elem.name.toLowerCase().includes('' + _this.string.toLowerCase()) || elem.surname.toLowerCase().includes('' + _this.string.toLowerCase()) || elem.patronymic.toLowerCase().includes('' + _this.string.toLowerCase())) {
+
+                        return elem;
+                    }
+                });
+
+                _this.$emit('needleUsers', needleUsers);
+
+                _this.oldLength = _this.string.length;
+            }, 300);
         }
     }
 });
