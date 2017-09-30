@@ -4,8 +4,8 @@
         <user-find :users = "users" @needleUsers = "needleUsers" v-if="showFind"></user-find>
 
         <div class="col-md-2">
-            <user-card :user = "currentUser"></user-card>
-            <user-form :fields = "fields" @newUser="renderNewUser"></user-form>
+            <user-card :user = "currentUser" :admin = "admin"></user-card>
+            <user-form :fields = "fields" @newUser="renderNewUser" v-if="admin"></user-form>
         </div>
 
         <div class="col-md-10">
@@ -38,6 +38,7 @@
                 fields: null,
                 currentUser: null,
                 showFind: false,
+                admin: false,
             }
         },
         beforeCreate() {
@@ -46,7 +47,9 @@
                 .then( (data) => {
                     this.fields = data.columns;
                     this.users = data[0];
+                    this.admin = data.admin;
                     this.showFind = true;
+                    this.currentUser = this.users[0];
                 })
         },
         components: {
@@ -68,6 +71,7 @@
                 });
             },
             needleUsers: function (needleUsers) {
+                this.currentUser = needleUsers[0];
                 this.users = needleUsers;
             }
         }

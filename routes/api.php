@@ -7,16 +7,16 @@ use App\User;
 // Доступны только админу
 Route::group(['middleware' => 'auth'], function (){
 
-    Route::post('register', 'Auth\RegisterController@register'); // add new admin
-    Route::post('logout', 'Auth\LoginController@logout'); // exit
-    // добавление нового пользователя
-    Route::put('users/{user}', 'UserController@update'); // edit post
-    Route::delete('users/{user}', 'UserController@delete'); // delete post
-
-    // Управление DB
-
-
 });
+
+
+Route::put('users/{user}', 'UserController@update'); // edit post
+Route::delete('users/{user}', 'UserController@delete'); // delete post
+
+
+Route::post('register', 'Auth\RegisterController@register'); // add new admin
+Route::post('logout', 'Auth\LoginController@logout'); // exit
+Route::get('admins', 'UserController@admins'); // reutrn list admin
 
 Route::post('users', 'UserController@store'); // add new post
 

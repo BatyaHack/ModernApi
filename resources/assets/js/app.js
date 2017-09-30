@@ -20,7 +20,5 @@ Vue.component('user-table', require('./components/UserTable.vue'));
 
 const app = new Vue({
     el: '#app',
-    users: [{name: `Oleg`, age: 30}
-    ],
 });
 console.log('here');

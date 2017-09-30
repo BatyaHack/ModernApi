@@ -1201,8 +1201,7 @@ Vue.component('example', __webpack_require__(39));
 Vue.component('user-table', __webpack_require__(45));
 
 var app = new Vue({
-  el: '#app',
-  users: [{ name: 'Oleg', age: 30 }]
+  el: '#app'
 });
 console.log('here');
 
@@ -42627,7 +42626,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             users: null,
             fields: null,
             currentUser: null,
-            showFind: false
+            showFind: false,
+            admin: false
         };
     },
     beforeCreate: function beforeCreate() {
@@ -42638,7 +42638,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }).then(function (data) {
             _this.fields = data.columns;
             _this.users = data[0];
+            _this.admin = data.admin;
             _this.showFind = true;
+            _this.currentUser = _this.users[0];
         });
     },
 
@@ -42661,6 +42663,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         needleUsers: function needleUsers(_needleUsers) {
+            this.currentUser = _needleUsers[0];
             this.users = _needleUsers;
         }
     }
@@ -42977,34 +42980,16 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.user-class__info {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  margin: 3px 0;\n}\n", ""]);
+exports.push([module.i, "\n.user-class__info {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  margin: 3px 0;\n}\n.user__create {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 57 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        user: null
-    }
-});
+throw new Error("Module build failed: SyntaxError: D:/Open_Server_Premium/OpenServer/domains/modern/resources/assets/js/components/UserCard.vue: Unsyntactic continue (57:28)\n\n\u001b[0m \u001b[90m 55 | \u001b[39m\n \u001b[90m 56 | \u001b[39m                        \u001b[36mif\u001b[39m(\u001b[36mtrue\u001b[39m)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 57 | \u001b[39m                            \u001b[36mcontinue\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 58 | \u001b[39m\n \u001b[90m 59 | \u001b[39m\n \u001b[90m 60 | \u001b[39m                        editData\u001b[33m.\u001b[39melem[name]\u001b[33m=\u001b[39m elem\u001b[33m.\u001b[39mtext\u001b[33m;\u001b[39m \u001b[90m// ойойоой как уязвимо\u001b[39m\u001b[0m\n");
 
 /***/ }),
 /* 58 */
@@ -43020,15 +43005,50 @@ var render = function() {
     [
       _c("img", { attrs: { src: "", alt: "Фото пользователя" } }),
       _vm._v(" "),
-      _vm._l(_vm.user, function(info, key) {
-        return _c("div", { staticClass: "user-class__info" }, [
-          _c("span", { staticClass: "user-class__key" }, [_vm._v(_vm._s(key))]),
-          _vm._v(" "),
-          _c("span", { staticClass: "user-class__info" }, [
-            _vm._v(_vm._s(info))
+      _vm.status === _vm.formStatus.EDIT
+        ? _vm._l(_vm.user, function(info, key) {
+            return _c("div", { staticClass: "user-class__info" }, [
+              _c("span", { staticClass: "user-class__key" }, [
+                _vm._v(_vm._s(key))
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-class__info" }, [
+                _vm._v(_vm._s(info))
+              ])
+            ])
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.status === _vm.formStatus.SEND
+        ? _vm._l(_vm.user, function(info, key) {
+            return _c("div", { staticClass: "user__create" }, [
+              _c("span", { staticClass: "user-class__key" }, [
+                _vm._v(_vm._s(key))
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "input  jsInput",
+                attrs: { type: "text", name: key, placeholder: info }
+              })
+            ])
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.user && _vm.admin
+        ? _c("div", { staticClass: "form-group" }, [
+            _c(
+              "button",
+              { staticClass: "btn  btn-primary", on: { click: _vm.send } },
+              [_vm._v(_vm._s(_vm.string))]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn  btn-danger", on: { click: _vm.clear } },
+              [_vm._v("Отмена")]
+            )
           ])
-        ])
-      })
+        : _vm._e()
     ],
     2
   )
@@ -43254,12 +43274,16 @@ var render = function() {
         "div",
         { staticClass: "col-md-2" },
         [
-          _c("user-card", { attrs: { user: _vm.currentUser } }),
+          _c("user-card", {
+            attrs: { user: _vm.currentUser, admin: _vm.admin }
+          }),
           _vm._v(" "),
-          _c("user-form", {
-            attrs: { fields: _vm.fields },
-            on: { newUser: _vm.renderNewUser }
-          })
+          _vm.admin
+            ? _c("user-form", {
+                attrs: { fields: _vm.fields },
+                on: { newUser: _vm.renderNewUser }
+              })
+            : _vm._e()
         ],
         1
       ),

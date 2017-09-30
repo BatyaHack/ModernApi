@@ -1,2 +1,5 @@
 JSON для регистрации:
      {"name": "Sergqy", "email": "sergqy@gmail.com", "password": "SergqySergqy", "password_confirmation": "SergqySergqy"}
+
+Дата для логина:
+     {"email": "sergqy@gmail.com", "password": "SergqySergqy" }
