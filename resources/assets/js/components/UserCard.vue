@@ -28,6 +28,8 @@
 </template>
 
 <script>
+    // не становится ли тут компонет завизимым от файла утлиты???
+    import {resetProperty} from '../utils';
 
     export default {
         data: function () {
@@ -90,7 +92,6 @@
                             }
                         )
                         .catch((err) => {
-                            console.error(`Ошибка в обновлении пользователя ${err}`);
                             this.error = true;
 
                             setTimeout(() => {
@@ -118,24 +119,22 @@
                 }
             },
             deleteUser: function () {
-
                 this.update = true;
-                this.$emit('deleteUser', this.user.id);
-//                fetch(`/api/users/${this.user.id}`, {
-//                    method: 'DELETE'
-//                })
-//                    .then(() => {
-//                        this.update = false;
-//                        this.$emit('deleteUser', this.user.id);
-//                    })
-//                    .catch(() => {
-//                        this.error = true;
-//                        // Перенести в функцию;
-//                        setTimeout(() => {
-//                            this.update = false;
-//                            this.error = false;
-//                        }, 3000);
-//                    })
+                fetch(`/api/users/${this.user.id}`, {
+                    method: 'DELETE'
+                })
+                    .then(() => {
+                        this.update = false;
+                        this.$emit('deleteUser', this.user.id);
+                    })
+                    .catch(() => {
+                        this.error = true;
+                        // Перенести в функцию;
+                        setTimeout(() => {
+                            this.update = false;
+                            this.error = false;
+                        }, 3000);
+                    })
             }
         }
     }

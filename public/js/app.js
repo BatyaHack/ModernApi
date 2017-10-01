@@ -42658,9 +42658,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var curretID = evt.target.parentElement.children[0].innerText;
 
             this.currentUser = this.users.find(function (elem, index, arr) {
-                if (elem.id == curretID) {
-                    return elem;
-                }
+                return elem.id === +curretID;
             });
         },
         needleUsers: function needleUsers(_needleUsers) {
@@ -42668,7 +42666,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.users = _needleUsers;
         },
         updateUser: function updateUser(user) {
-
             var updateUser = this.users.find(function (elem, index, arr) {
                 return elem.id === user.id;
             });
@@ -42686,7 +42683,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             });
 
-            this.users.splice(indexUser, indexUser + 1);
+            this.users.splice(indexUser, 1);
         }
     }
 });
@@ -43013,6 +43010,7 @@ exports.push([module.i, "\n.user-class__info {\n  display: flex;\n  justify-cont
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(74);
 //
 //
 //
@@ -43042,6 +43040,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+// не становится ли тут компонет завизимым от файла утлиты???
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43103,7 +43103,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.$emit('correctUser', data);
                     _this.update = false;
                 }).catch(function (err) {
-                    console.error('\u041E\u0448\u0438\u0431\u043A\u0430 \u0432 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0438 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F ' + err);
                     _this.error = true;
 
                     setTimeout(function () {
@@ -43130,24 +43129,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         deleteUser: function deleteUser() {
+            var _this2 = this;
 
             this.update = true;
-            this.$emit('deleteUser', this.user.id);
-            //                fetch(`/api/users/${this.user.id}`, {
-            //                    method: 'DELETE'
-            //                })
-            //                    .then(() => {
-            //                        this.update = false;
-            //                        this.$emit('deleteUser', this.user.id);
-            //                    })
-            //                    .catch(() => {
-            //                        this.error = true;
-            //                        // Перенести в функцию;
-            //                        setTimeout(() => {
-            //                            this.update = false;
-            //                            this.error = false;
-            //                        }, 3000);
-            //                    })
+            fetch('/api/users/' + this.user.id, {
+                method: 'DELETE'
+            }).then(function () {
+                _this2.update = false;
+                _this2.$emit('deleteUser', _this2.user.id);
+            }).catch(function () {
+                _this2.error = true;
+                // Перенести в функцию;
+                setTimeout(function () {
+                    _this2.update = false;
+                    _this2.error = false;
+                }, 3000);
+            });
         }
     }
 });
@@ -43544,6 +43541,34 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export resetProperty */
+/**
+ * Created by GoldGym on 01.10.2017.
+ */
+
+function resetProperty(time) {
+    var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    var propery = arguments[2];
+
+    setTimeout(function () {
+        propery[0] = false;
+        propery[1] = false;
+    }, time);
+}
 
 /***/ })
 /******/ ]);

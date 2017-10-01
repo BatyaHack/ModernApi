@@ -66,9 +66,7 @@
                 const curretID = evt.target.parentElement.children[0].innerText;
 
                 this.currentUser = this.users.find((elem, index, arr) => {
-                    if (elem.id == curretID) {
-                        return elem;
-                    }
+                    return elem.id === +curretID;
                 });
             },
             needleUsers: function (needleUsers) {
@@ -76,7 +74,6 @@
                 this.users = needleUsers;
             },
             updateUser: function (user) {
-
                 const updateUser = this.users.find((elem, index, arr) => {
                     return elem.id === user.id;
                 });
@@ -95,8 +92,7 @@
                     }
                 });
 
-                this.users.splice(indexUser, indexUser+1);
-
+                this.users.splice(indexUser, 1);
             }
         }
     }
