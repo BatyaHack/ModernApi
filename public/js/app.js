@@ -42615,6 +42615,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -42665,6 +42666,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         needleUsers: function needleUsers(_needleUsers) {
             this.currentUser = _needleUsers[0];
             this.users = _needleUsers;
+        },
+        updateUser: function updateUser(user) {
+
+            var updateUser = this.users.find(function (elem, index, arr) {
+                return elem.id === user.id;
+            });
+
+            Object.assign(updateUser, user);
+        },
+        deleteUser: function deleteUser(id) {
+
+            var indexUser = null;
+
+            this.users.find(function (elem, index, arr) {
+                if (elem.id === id) {
+                    indexUser = index;
+                    return true;
+                }
+            });
+
+            this.users.splice(indexUser, indexUser + 1);
         }
     }
 });
@@ -42980,16 +43002,155 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.user-class__info {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  margin: 3px 0;\n}\n.user__create {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n", ""]);
+exports.push([module.i, "\n.user-class__info {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  margin: 3px 0;\n}\n.user__create {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.status__text--success span {\n  animation-name: update;\n  animation-iteration-count: infinite;\n  animation-duration: 1s;\n  animation-timing-function: linear;\n}\n@keyframes update {\n0% {\n    transform: rotate(0deg);\n}\n100% {\n    transform: rotate(360deg);\n}\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 57 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: D:/Open_Server_Premium/OpenServer/domains/modern/resources/assets/js/components/UserCard.vue: Unsyntactic continue (57:28)\n\n\u001b[0m \u001b[90m 55 | \u001b[39m\n \u001b[90m 56 | \u001b[39m                        \u001b[36mif\u001b[39m(\u001b[36mtrue\u001b[39m)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 57 | \u001b[39m                            \u001b[36mcontinue\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 58 | \u001b[39m\n \u001b[90m 59 | \u001b[39m\n \u001b[90m 60 | \u001b[39m                        editData\u001b[33m.\u001b[39melem[name]\u001b[33m=\u001b[39m elem\u001b[33m.\u001b[39mtext\u001b[33m;\u001b[39m \u001b[90m// ойойоой как уязвимо\u001b[39m\u001b[0m\n");
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            update: false,
+            error: false,
+            string: null,
+            status: null,
+            formStatus: {
+                EDIT: 1,
+                SEND: 2
+            }
+        };
+    },
+    mounted: function mounted() {
+        this.setStatus(this.formStatus.EDIT);
+    },
+
+    props: {
+        user: null,
+        admin: false
+    },
+    methods: {
+        send: function send() {
+            var _this = this;
+
+            if (this.status === this.formStatus.SEND) {
+
+                this.update = true;
+                var userID = this.user.id;
+                var editData = {};
+                // или закрепить на полям :model как чистого юзера
+                // и потом совмешать "чистого" юзера с тем что есть
+                // но пока сделаем через перебор инпутов
+
+                var allInput = document.body.querySelectorAll('.jsInput');
+                allInput.forEach(function (elem, index, arr) {
+                    //forEach метод, а не цикл
+
+                    if (!elem.value) {
+                        console.log('Пропускаю');
+                        return;
+                    }
+                    console.log(elem.name);
+                    editData[elem.name] = elem.value; // ойойоой как уязвимо
+                });
+
+                fetch('/api/users/' + userID, {
+                    method: 'PUT',
+                    body: JSON.stringify(editData),
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function (data) {
+                    return data.json();
+                }).then(function (data) {
+                    _this.$emit('correctUser', data);
+                    _this.update = false;
+                }).catch(function (err) {
+                    console.error('\u041E\u0448\u0438\u0431\u043A\u0430 \u0432 \u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0438 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F ' + err);
+                    _this.error = true;
+
+                    setTimeout(function () {
+                        _this.update = false;
+                        _this.error = false;
+                    }, 3000);
+                });
+            } else {
+                this.setStatus(this.formStatus.SEND);
+            }
+        },
+        clear: function clear() {
+            this.setStatus(this.formStatus.EDIT);
+        },
+        setStatus: function setStatus(value) {
+            this.status = value;
+            switch (value) {
+                case this.formStatus.EDIT:
+                    this.string = 'Править';
+                    break;
+                case this.formStatus.SEND:
+                    this.string = 'Отправить';
+                    break;
+            }
+        },
+        deleteUser: function deleteUser() {
+
+            this.update = true;
+            this.$emit('deleteUser', this.user.id);
+            //                fetch(`/api/users/${this.user.id}`, {
+            //                    method: 'DELETE'
+            //                })
+            //                    .then(() => {
+            //                        this.update = false;
+            //                        this.$emit('deleteUser', this.user.id);
+            //                    })
+            //                    .catch(() => {
+            //                        this.error = true;
+            //                        // Перенести в функцию;
+            //                        setTimeout(() => {
+            //                            this.update = false;
+            //                            this.error = false;
+            //                        }, 3000);
+            //                    })
+        }
+    }
+});
 
 /***/ }),
 /* 58 */
@@ -43037,16 +43198,65 @@ var render = function() {
       _vm.user && _vm.admin
         ? _c("div", { staticClass: "form-group" }, [
             _c(
-              "button",
-              { staticClass: "btn  btn-primary", on: { click: _vm.send } },
-              [_vm._v(_vm._s(_vm.string))]
+              "p",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.update,
+                    expression: "update"
+                  }
+                ],
+                staticClass: "status__text  status__text--success"
+              },
+              [
+                _c("span", { staticClass: "glyphicon glyphicon-repeat" }),
+                _vm._v(" Идет обновление данных")
+              ]
             ),
             _vm._v(" "),
             _c(
-              "button",
-              { staticClass: "btn  btn-danger", on: { click: _vm.clear } },
-              [_vm._v("Отмена")]
-            )
+              "p",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.error,
+                    expression: "error"
+                  }
+                ],
+                staticClass: "status__text  status__text--error  bg-danger"
+              },
+              [
+                _c("span", { staticClass: "glyphicon glyphicon-remove" }),
+                _vm._v(" Что что то пошло не так")
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "btn-group" }, [
+              _c(
+                "button",
+                { staticClass: "btn  btn-primary", on: { click: _vm.send } },
+                [_vm._v(_vm._s(_vm.string))]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn  btn-success", on: { click: _vm.clear } },
+                [_vm._v("Отмена")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn  btn-danger",
+                  on: { click: _vm.deleteUser }
+                },
+                [_vm._v("Удалить")]
+              )
+            ])
           ])
         : _vm._e()
     ],
@@ -43275,7 +43485,8 @@ var render = function() {
         { staticClass: "col-md-2" },
         [
           _c("user-card", {
-            attrs: { user: _vm.currentUser, admin: _vm.admin }
+            attrs: { user: _vm.currentUser, admin: _vm.admin },
+            on: { correctUser: _vm.updateUser, deleteUser: _vm.deleteUser }
           }),
           _vm._v(" "),
           _vm.admin

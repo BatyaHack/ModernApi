@@ -14,8 +14,15 @@
             </div>
         </template>
         <div class="form-group" v-if="user && admin">
-            <button class="btn  btn-primary" @click="send">{{string}}</button>
-            <button class="btn  btn-danger" @click="clear">Отмена</button>
+            <p class="status__text  status__text--success" v-show="update"><span
+                    class="glyphicon glyphicon-repeat"></span> Идет обновление данных</p>
+            <p class="status__text  status__text--error  bg-danger" v-show="error"><span
+                    class="glyphicon glyphicon-remove"></span> Что что то пошло не так</p>
+            <div class="btn-group">
+                <button class="btn  btn-primary" @click="send">{{string}}</button>
+                <button class="btn  btn-success" @click="clear">Отмена</button>
+                <button class="btn  btn-danger" @click="deleteUser">Удалить</button>
+            </div>
         </div>
     </div>
 </template>
@@ -25,6 +32,8 @@
     export default {
         data: function () {
             return {
+                update: false,
+                error: false,
                 string: null,
                 status: null,
                 formStatus: {
@@ -42,8 +51,10 @@
         },
         methods: {
             send: function () {
+
                 if (this.status === this.formStatus.SEND) {
 
+                    this.update = true;
                     const userID = this.user.id;
                     const editData = {};
                     // или закрепить на полям :model как чистого юзера
@@ -51,21 +62,43 @@
                     // но пока сделаем через перебор инпутов
 
                     const allInput = document.body.querySelectorAll('.jsInput');
-                    allInput.forEach((elem, index, arr) => {
+                    allInput.forEach((elem, index, arr) => { //forEach метод, а не цикл
 
-                        if(true)
-                            continue;
-
-
-                        editData.elem[name]= elem.text; // ойойоой как уязвимо
+                        if (!elem.value) {
+                            console.log('Пропускаю');
+                            return;
+                        }
+                        console.log(elem.name);
+                        editData[elem.name] = elem.value; // ойойоой как уязвимо
                     });
 
-                    console.log(editData);
 
-//                    fetch(`/api/users/${userID}`, {
-//
-//                    });
+                    fetch(`/api/users/${userID}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(editData),
+                        headers: {
+                            'Access-Control-Allow-Origin': `*`,
+                            'Content-Type': `application/json`,
+                        }
+                    })
+                        .then((data) => {
+                            return data.json();
+                        })
+                        .then((data) => {
+                                this.$emit('correctUser', data);
+                                this.update = false;
+                            }
+                        )
+                        .catch((err) => {
+                            console.error(`Ошибка в обновлении пользователя ${err}`);
+                            this.error = true;
 
+                            setTimeout(() => {
+                                this.update = false;
+                                this.error = false;
+                            }, 3000);
+
+                        });
                 } else {
                     this.setStatus(this.formStatus.SEND);
                 }
@@ -83,6 +116,26 @@
                         this.string = 'Отправить';
                         break;
                 }
+            },
+            deleteUser: function () {
+
+                this.update = true;
+                this.$emit('deleteUser', this.user.id);
+//                fetch(`/api/users/${this.user.id}`, {
+//                    method: 'DELETE'
+//                })
+//                    .then(() => {
+//                        this.update = false;
+//                        this.$emit('deleteUser', this.user.id);
+//                    })
+//                    .catch(() => {
+//                        this.error = true;
+//                        // Перенести в функцию;
+//                        setTimeout(() => {
+//                            this.update = false;
+//                            this.error = false;
+//                        }, 3000);
+//                    })
             }
         }
     }
@@ -101,5 +154,30 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .status__text {
+
+        &--success {
+            span {
+                animation-name: update;
+                animation-iteration-count: infinite;
+                animation-duration: 1s;
+                animation-timing-function: linear;
+            }
+        }
+
+        &--error {
+
+        }
+    }
+
+    @keyframes update {
+        0% {
+            transform: rotate(0deg)
+        }
+        100% {
+            transform: rotate(360deg)
+        }
     }
 </style>

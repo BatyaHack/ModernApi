@@ -21,7 +21,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function  admins() {
+    public function admins() {
         return Admin::all();
     }
 
