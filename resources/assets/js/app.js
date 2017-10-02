@@ -8,6 +8,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import routes from './routes.js';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,10 +16,27 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
-Vue.component('user-table', require('./components/UserTable.vue'));
+// Vue.component('user-table', require('./components/UserTable.vue'));
+Vue.component('homePage', require('./pages/home.vue'));
 
 const app = new Vue({
     el: '#app',
+    data: {
+        currentRoute: window.location.pathname,
+    },
+    computed: {
+        viewComputed () {
+            const matchingView = routes[this.currentRoute];
+            return matchingView
+                ? require('./pages/' + matchingView + '.vue')
+                : require('./pages/404.vue')
+        }
+    },
+    render (h) {
+        return h(this.viewComputed);
+    }
 });
-console.log('here');
+
+window.addEventListener('popstate', () => {
+    app.currentRoute = window.location.pathname;
+});

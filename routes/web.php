@@ -11,11 +11,15 @@
 |
 */
 
+use Illuminate\Support\Facades\Artisan;
+
+Artisan::call('cache:clear');
+
 Route::get('/', function () {
-    return view('users');
+   return view('layout.master');
 });
 
-Route::get('/field', function () {
-    return view('field');
+Route::get('/login', function () {
+   return view('layout.master');
 });
 

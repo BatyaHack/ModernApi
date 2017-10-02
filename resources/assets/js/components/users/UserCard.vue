@@ -29,7 +29,6 @@
 
 <script>
     // не становится ли тут компонет завизимым от файла утлиты???
-    import {resetProperty} from '../utils';
 
     export default {
         data: function () {
