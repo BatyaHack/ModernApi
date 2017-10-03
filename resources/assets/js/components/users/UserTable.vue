@@ -46,6 +46,7 @@
             fetch('/api/users')
                 .then((data) => data.json())
                 .then((data) => {
+                    console.log(data);
                     this.fields = data.columns;
                     this.users = data[0];
                     this.admin = data.admin;

@@ -16,7 +16,7 @@ import routes from './routes.js';
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// Vue.component('user-table', require('./components/UserTable.vue'));
+
 Vue.component('homePage', require('./pages/home.vue'));
 
 const app = new Vue({

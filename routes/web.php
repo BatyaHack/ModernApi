@@ -15,11 +15,9 @@ use Illuminate\Support\Facades\Artisan;
 
 Artisan::call('cache:clear');
 
-Route::get('/', function () {
-   return view('layout.master');
-});
+// при любом роуте отдаем js. А роутинг уже настраиваем в js
 
-Route::get('/login', function () {
+Route::get('/{any?}', function () {
    return view('layout.master');
 });
 
