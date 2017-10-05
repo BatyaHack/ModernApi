@@ -26,14 +26,16 @@ const app = new Vue({
     },
     computed: {
         viewComputed () {
-            const matchingView = routes[this.currentRoute];
-            return matchingView
-                ? require('./pages/' + matchingView + '.vue')
-                : require('./pages/404.vue')
+            // const matchingView = routes[this.currentRoute];
+            // return matchingView
+            //     ? require('./pages/' + matchingView + '.vue')
+            //     : require('./pages/404.vue')
+
+            require('./pages/login.vue');
         }
     },
     render (h) {
-        return h(this.viewComputed);
+        return h(require('./pages/login.vue'));
     }
 });
 

@@ -17,7 +17,13 @@ Artisan::call('cache:clear');
 
 // при любом роуте отдаем js. А роутинг уже настраиваем в js
 
-Route::get('/{any?}', function () {
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/test', 'HomeController@test');
+
+Route::get('/page', function () {
    return view('layout.master');
 });
+
 

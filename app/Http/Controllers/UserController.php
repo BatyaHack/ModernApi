@@ -13,11 +13,12 @@ class UserController extends Controller
         $name_column = \Schema::getColumnListing('users');;
         $all_users = User::all();
         $admin = Auth::check();
-
+        $user = Auth::user();
         return response()->json([
             $all_users,
             'columns' => $name_column,
-            'admin' => true, // пока у нас все пользователи админы
+            'admin' => $admin, // пока у нас все пользователи админы
+            'userReg' => $user,
         ], 200);
     }
 
