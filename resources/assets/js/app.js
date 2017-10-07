@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -26,16 +25,16 @@ const app = new Vue({
     },
     computed: {
         viewComputed () {
-            // const matchingView = routes[this.currentRoute];
-            // return matchingView
-            //     ? require('./pages/' + matchingView + '.vue')
-            //     : require('./pages/404.vue')
+            const matchingView = routes[this.currentRoute];
+            return matchingView
+                ? require('./pages/' + matchingView + '.vue')
+                : require('./pages/404.vue')
 
             require('./pages/login.vue');
         }
     },
     render (h) {
-        return h(require('./pages/login.vue'));
+        return h(this.viewComputed);
     }
 });
 

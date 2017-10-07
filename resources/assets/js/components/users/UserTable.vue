@@ -43,7 +43,18 @@
             }
         },
         beforeCreate() {
-            fetch('/api/users')
+
+            const token = localStorage.getItem('modernToken');
+
+            axios({
+                method: 'get',
+                url: '/api/personal',
+                headers: {'X-Custom-token': token}
+            })
+                .then((data) => {
+
+                    return data;
+                })
                 .then((data) => data.json())
                 .then((data) => {
                     console.log(data);

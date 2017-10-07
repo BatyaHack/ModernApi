@@ -3,48 +3,55 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use JWTAuth;
 use App\User;
-use App\Admin;
-use Illuminate\Support\Facades\Auth;
+use JWTAuthException;
 
 class UserController extends Controller
 {
-    public function index() {
-        $name_column = \Schema::getColumnListing('users');;
-        $all_users = User::all();
-        $admin = Auth::check();
-        $user = Auth::user();
-        return response()->json([
-            $all_users,
-            'columns' => $name_column,
-            'admin' => $admin, // пока у нас все пользователи админы
-            'userReg' => $user,
-        ], 200);
+    private $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
     }
 
-    public function admins() {
-        return Admin::all();
+    public function register(Request $request)
+    {
+        $user = $this->user->create([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => bcrypt($request->get('password'))
+        ]);
+        return response()->json(['status' => true, 'message' => 'User created successfully', 'data' => $user]);
     }
 
-    public function show(User $user) {
-        return $user;
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+        $token = null;
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['invalid_email_or_password'], 422);
+            }
+        } catch (JWTAuthException $e) {
+            return response()->json(['failed_to_create_token'], 500);
+        }
+        return response()->json(compact('token'));
     }
 
-    public function store(Request $request) {
-        $user = User::create($request->all());
-
-        return response()->json($user, 201);
+    public function getAuthUser(Request $request)
+    {
+        $user = JWTAuth::toUser($request->token);
+        return response()->json(['result' => $user]);
     }
 
-    public function update(Request $request, User $user) {
-        $user->update($request->all());
+    public function checkHeaders($token) {
 
-        return response()->json($user, 200);
-    }
+        $user = JWTAuth::toUser($token);
+        return response()->json(['result' => $user]);
 
-    public function delete(User $user) {
-        $user->delete();
-
-        return response()->json(null, 200);
     }
 }

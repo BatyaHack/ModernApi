@@ -4,11 +4,13 @@
 
         <transition name="fade">
 
-            <form action="/api/users" method="post" v-if="show">
+            <form action="/api/personal" method="post" v-if="show">
 
                 <label class="user-block" v-for="field in fields">
-                    <span class="user-block__label">{{field}}</span>
-                    <input class="user-block__input" type="text" :name="field">
+                    <div class="user-wrapper" v-if="field != 'created_at' && field != 'updated_at' && field != 'id'">
+                        <span class="user-block__label">{{field}}</span>
+                        <input class="user-block__input" type="text" :name="field">
+                    </div>
                 </label>
 
                 <button @click.prevent="sendData">Добавить</button>
@@ -37,16 +39,23 @@
                     self[elem.name] = elem.value;
                 });
 
-                fetch('/api/users', {
-                    method: 'POST',
-                    body: JSON.stringify(this.user),
-                    headers: {
-                        'Access-Control-Allow-Origin': `*`,
-                        'Content-Type': `application/json`,
-                    }
-                })
-                    .then((data) => console.log('Дата отправлена'))
-                    .then(this.$emit('newUser', this.user))
+
+                axios.post('/api/personal', this.user)
+                    .then((data) => {
+
+                        const dataAdapter = {};
+
+                        dataAdapter.id = data.data.id;
+
+
+                        for (let item in data.data) {
+                            dataAdapter[item] = data.data[item];
+                        }
+
+                        return dataAdapter;
+
+                    })
+                    .then((data) => this.$emit('newUser', data))
                     .catch((err) => console.log(err));
             }
         }

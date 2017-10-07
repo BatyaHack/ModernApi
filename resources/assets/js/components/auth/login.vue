@@ -46,27 +46,15 @@
                     password: this.password
                 };
 
-                fetch('/api/login', {
-                    method: 'POST',
-                    body: JSON.stringify(loginData),
-                    headers: {
-                        'Access-Control-Allow-Origin': `*`,
-                        'Content-Type': `application/json`,
-                    }
-                })
-                    .then((data) => {
-                        console.log(data);
-                        return data;
-                    })
-                    .then((data) => data.json())
+
+                axios.post('/api/auth/login', loginData)
                     .then((data) => {
 
-                        this.update = false;
+                        const token = data.data;
+                        localStorage.setItem('modernToken', token);
 
-                        if (data.auth === false) {
-                            throw new Error('login or password error');
-                        }
                     })
+                    .then(() => this.update = false)
                     .catch((err) => {
                         this.update = false;
                         this.error = true;
@@ -87,7 +75,6 @@
     .text-error {
         color: red;
     }
-
 
     .status__text {
 

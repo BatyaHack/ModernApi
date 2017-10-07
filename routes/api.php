@@ -1,52 +1,30 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\User;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
 
-// Доступны только админу
-Route::group(['middleware' => 'auth'], function (){
-
-    Route::get('users/{user}', 'UserController@show'); // solo user
-
-
+Route::post('auth/register', 'UserController@register');
+Route::post('auth/login', 'UserController@login');
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::get('user', 'UserController@getAuthUser');
 });
 
 
-Route::get('/home', 'HomeController@index')->name('home');
-// Маршруты аутентификации...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+// роуты для работы с персоналом
+Route::get('personal', 'PersonalController@index');
+Route::get('personal/{persona}', 'PersonalController@show');
+Route::post('personal', 'PersonalController@store');
+Route::put('personal/{persona}', 'PersonalController@update');
+Route::delete('personal/{persona}', 'PersonalController@delete');
 
-// Маршруты регистрации...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
-
-
-
-
-
-
-
-
-Route::get('users', 'UserController@index'); // all users
-Route::put('users/{user}', 'UserController@update'); // edit post
-Route::delete('users/{user}', 'UserController@delete'); // delete post
-
-
-Route::post('register', 'Auth\RegisterController@register'); // add new admin
-Route::post('logout', 'Auth\LoginController@logout'); // exit
-Route::get('admins', 'UserController@admins'); // reutrn list admin
-
-Route::post('users', 'UserController@store'); // add new post
-
-
-// Доступны всем
-Route::post('login', 'Auth\LoginController@login'); //login
-Route::get('users', 'UserController@index'); // all users
-
-
-// Перенести в управление DB
-Route::get('field', 'FiledController@index'); // all field in data base
-Route::post('field', 'FiledController@add'); // create field in data base

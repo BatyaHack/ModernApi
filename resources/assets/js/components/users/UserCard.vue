@@ -73,17 +73,9 @@
                         editData[elem.name] = elem.value; // ойойоой как уязвимо
                     });
 
-
-                    fetch(`/api/users/${userID}`, {
-                        method: 'PUT',
-                        body: JSON.stringify(editData),
-                        headers: {
-                            'Access-Control-Allow-Origin': `*`,
-                            'Content-Type': `application/json`,
-                        }
-                    })
+                    axios.put(`/api/personal/${userID}`, editData)
                         .then((data) => {
-                            return data.json();
+                            return data.data;
                         })
                         .then((data) => {
                                 this.$emit('correctUser', data);
@@ -119,9 +111,7 @@
             },
             deleteUser: function () {
                 this.update = true;
-                fetch(`/api/users/${this.user.id}`, {
-                    method: 'DELETE'
-                })
+                axios.delete(`/api/personal/${this.user.id}`)
                     .then(() => {
                         this.update = false;
                         this.$emit('deleteUser', this.user.id);
