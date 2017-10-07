@@ -21,24 +21,24 @@ Vue.component('homePage', require('./pages/home.vue'));
 
 const app = new Vue({
     el: '#app',
-    data: {
-        currentRoute: window.location.pathname,
-    },
-    computed: {
-        viewComputed () {
-            // const matchingView = routes[this.currentRoute];
-            // return matchingView
-            //     ? require('./pages/' + matchingView + '.vue')
-            //     : require('./pages/404.vue')
-
-            require('./pages/login.vue');
-        }
-    },
-    render (h) {
-        return h(require('./pages/login.vue'));
-    }
+    // data: {
+    //     currentRoute: window.location.pathname,
+    // },
+    // computed: {
+    //     viewComputed () {
+    //         // const matchingView = routes[this.currentRoute];
+    //         // return matchingView
+    //         //     ? require('./pages/' + matchingView + '.vue')
+    //         //     : require('./pages/404.vue')
+    //
+    //         //require('./pages/login.vue');
+    //     }
+    // },
+    // render (h) {
+    //     return h(require('./pages/login.vue'));
+    // }
 });
 
-window.addEventListener('popstate', () => {
-    app.currentRoute = window.location.pathname;
-});
+// window.addEventListener('popstate', () => {
+//     app.currentRoute = window.location.pathname;
+// });

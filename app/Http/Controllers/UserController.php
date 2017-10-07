@@ -27,7 +27,12 @@ class UserController extends Controller
     }
 
     public function show(User $user) {
-        return $user;
+        $admin = Auth::check();
+        $user = Auth::user();
+        return response()->json([
+            'columns' => $admin,
+            'user' => $user,
+        ]);
     }
 
     public function store(Request $request) {

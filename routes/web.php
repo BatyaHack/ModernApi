@@ -22,8 +22,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/test', 'HomeController@test');
 
-Route::get('/page', function () {
-   return view('layout.master');
-});
+    Route::get('/page', function () {
+        return view('layout.master');
+    });
 
 
