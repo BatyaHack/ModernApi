@@ -11,8 +11,7 @@
         "laravel/framework": "5.5.*",
         "laravel/passport": "^4.0",
         "laravel/tinker": "~1.0",
-        "nesbot/carbon": "^1.22",
-        "tymon/jwt-auth": "^0.5.12"
+        "nesbot/carbon": "^1.22"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
