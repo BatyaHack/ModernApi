@@ -29,8 +29,6 @@ const app = new Vue({
             return matchingView
                 ? require('./pages/' + matchingView + '.vue')
                 : require('./pages/404.vue')
-
-            require('./pages/login.vue');
         }
     },
     render (h) {

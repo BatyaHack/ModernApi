@@ -30,11 +30,11 @@
                         this.getData();
                     }
 
+
                     const needleUsers = this.users.filter((elem, index, arr) => {
 
                         if (elem.name.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
-                            elem.surname.toLowerCase().includes(`${this.string.toLowerCase()}`) ||
-                            elem.patronymic.toLowerCase().includes(`${this.string.toLowerCase()}`)) {
+                            elem.family.toLowerCase().includes(`${this.string.toLowerCase()}`)) {
 
                             return elem;
 
@@ -48,6 +48,7 @@
             }
         }
     }
+
 
 </script>
 

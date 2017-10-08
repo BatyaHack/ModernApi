@@ -46,21 +46,29 @@
 
             const token = localStorage.getItem('modernToken');
 
+            console.log(token);
+
             axios({
-                method: 'get',
+                method: 'GET',
                 url: '/api/personal',
-                headers: {'X-Custom-token': token}
+                headers: {
+                    'x-custom-token' : token,
+                }
             })
                 .then((data) => {
-
-                    return data;
+                    return data.data;
                 })
-                .then((data) => data.json())
                 .then((data) => {
                     console.log(data);
                     this.fields = data.columns;
                     this.users = data[0];
-                    this.admin = data.admin;
+
+                    if(data.user !== false) {
+                        this.admin = data.user.original.result.id;
+                    } else {
+                        this.admin = data.user;
+                    }
+
                     this.showFind = true;
                     this.currentUser = this.users[0];
                 })

@@ -2,13 +2,8 @@
     <div class="container">
         <div class="col-md-12">
             <form action="#" method="get">
-                <div class="form-group" v-show="error">
-                    <p class="text-error"> Вы ввели неверный логин или пароль </p>
-                </div>
-                <div class="form-group" v-show="update">
-                    <p class="status__text  status__text--success"><span
-                            class="glyphicon glyphicon-repeat"></span> Идет обновление данных</p>
-                </div>
+                <process :update = "error" :message = "errorMessage" :error="true"></process>
+                <process :update = "update" :message = "message"></process>
                 <div class="form-group">
                     <label for="email">Мыло</label>
                     <input type="email" class="form-control" id="email" placeholder="Мыло" v-model="email">
@@ -26,6 +21,9 @@
 </template>
 
 <script>
+
+    import process from '../dateProcess/process.vue';
+
     export default {
         data: function () {
             return {
@@ -33,6 +31,8 @@
                 password: null,
                 error: false,
                 update: false,
+                message: 'Данные в обработке',
+                errorMessage: 'С данными что то не так'
             }
         },
         methods: {
@@ -49,12 +49,10 @@
 
                 axios.post('/api/auth/login', loginData)
                     .then((data) => {
-
                         const token = data.data;
-                        localStorage.setItem('modernToken', token);
-
+                        localStorage.setItem('modernToken', token.token);
+                        this.update = false;
                     })
-                    .then(() => this.update = false)
                     .catch((err) => {
                         this.update = false;
                         this.error = true;
@@ -66,6 +64,9 @@
 
             }
 
+        },
+        components: {
+            process,
         }
     }
 </script>
