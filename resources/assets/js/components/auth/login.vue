@@ -52,6 +52,7 @@
                         const token = data.data;
                         localStorage.setItem('modernToken', token.token);
                         this.update = false;
+                        window.location.pathname = '/';
                     })
                     .catch((err) => {
                         this.update = false;

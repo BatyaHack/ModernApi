@@ -72,13 +72,8 @@
                     })
                     .then(this.update = false)
                     .then(() => {
-
                         this.success = true;
-
-                        setTimeout(() => {
-                            this.success = false;
-                        }, 3000);
-
+                        window.location.pathname = "/login";
                     })
                     .catch((error) => {
                         this.update = false;
