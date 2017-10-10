@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use JWTAuth;
 use App\User;
 use JWTAuthException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class UserController extends Controller
 {
@@ -49,9 +52,21 @@ class UserController extends Controller
         return response()->json(['result' => $user]);
     }
 
-    public function checkHeaders($token) {
+    public function getAuthUserHeader(Request $request)
+    {
 
-        $user = JWTAuth::toUser($token);
+        try {
+            $header = $request->header('x-custom-token');
+            $user = JWTAuth::toUser($header);
+        } catch (TokenInvalidException $error) {
+            $user = false;
+        } catch (TokenExpiredException $error) {
+            $user = false;
+        } catch (JWTException $error) {
+            $user = false;
+        }
+
+
         return response()->json(['result' => $user]);
 
     }

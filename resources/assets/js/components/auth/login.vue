@@ -57,6 +57,7 @@
                     .catch((err) => {
                         this.update = false;
                         this.error = true;
+                        this.errorMessage = err.message;
 
                         setTimeout(() => {
                             this.error = false;

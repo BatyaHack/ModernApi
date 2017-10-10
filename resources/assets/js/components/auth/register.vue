@@ -70,17 +70,23 @@
                     .then(() => {
                         return axios.post('/api/auth/register', data)
                     })
-                    .then(this.update = false)
                     .then(() => {
-                        this.success = true;
-                        window.location.pathname = "/login";
+                        // можно проверить правильность данных, которые пришли от сервера
+                        // а только потом отправоять лошин
+                        return axios.post('/api/auth/login', data);
+                    })
+                    // вот это можно было бы как то пложить в функцию. Так как слишком уж часто ее юзаю
+                    .then((data) => {
+                        const token = data.data;
+                        localStorage.setItem('modernToken', token.token);
+                        this.update = false;
+                        window.location.pathname = '/';
                     })
                     .catch((error) => {
                         this.update = false;
                         this.messageError = error.message;
                         this.error = true;
 
-                        // ну перенеси ты это в функцию уже!
                         setTimeout(() => {
 
                             this.error = false;

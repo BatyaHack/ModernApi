@@ -42665,6 +42665,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__UserCard_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__UserCard_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__UserFind_vue__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__UserFind_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__UserFind_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__auth_link_vue__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__auth_link_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__auth_link_vue__);
 //
 //
 //
@@ -42694,6 +42696,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 
@@ -42743,7 +42747,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         UserForm: __WEBPACK_IMPORTED_MODULE_0__AddUser_vue___default.a,
         UserCard: __WEBPACK_IMPORTED_MODULE_1__UserCard_vue___default.a,
-        UserFind: __WEBPACK_IMPORTED_MODULE_2__UserFind_vue___default.a
+        UserFind: __WEBPACK_IMPORTED_MODULE_2__UserFind_vue___default.a,
+        UserLink: __WEBPACK_IMPORTED_MODULE_3__auth_link_vue___default.a
     },
     methods: {
         renderNewUser: function renderNewUser(newUser) {
@@ -42903,6 +42908,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -42954,17 +42963,20 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "button",
-        {
-          on: {
-            click: function($event) {
-              _vm.show = !_vm.show
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info",
+            on: {
+              click: function($event) {
+                _vm.show = !_vm.show
+              }
             }
-          }
-        },
-        [_vm._v("Открыть")]
-      ),
+          },
+          [_vm._v("Открыть")]
+        )
+      ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.show
@@ -42991,18 +43003,21 @@ var render = function() {
                   ])
                 }),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        _vm.sendData($event)
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.sendData($event)
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("Добавить")]
-                )
+                    },
+                    [_vm._v("Добавить")]
+                  )
+                ])
               ],
               2
             )
@@ -43588,7 +43603,9 @@ var render = function() {
                 attrs: { fields: _vm.fields },
                 on: { newUser: _vm.renderNewUser }
               })
-            : _vm._e()
+            : _vm._e(),
+          _vm._v(" "),
+          _c("user-link", { attrs: { login: _vm.admin } })
         ],
         1
       ),
@@ -44017,6 +44034,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (err) {
                 _this.update = false;
                 _this.error = true;
+                _this.errorMessage = err.message;
 
                 setTimeout(function () {
                     _this.error = false;
@@ -44569,15 +44587,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }).then(function () {
                 return axios.post('/api/auth/register', data);
-            }).then(this.update = false).then(function () {
-                _this.success = true;
-                window.location.pathname = "/login";
+            }).then(function () {
+                // можно проверить правильность данных, которые пришли от сервера
+                // а только потом отправоять лошин
+                return axios.post('/api/auth/login', data);
+            })
+            // вот это можно было бы как то пложить в функцию. Так как слишком уж часто ее юзаю
+            .then(function (data) {
+                var token = data.data;
+                localStorage.setItem('modernToken', token.token);
+                _this.update = false;
+                window.location.pathname = '/';
             }).catch(function (error) {
                 _this.update = false;
                 _this.messageError = error.message;
                 _this.error = true;
 
-                // ну перенеси ты это в функцию уже!
                 setTimeout(function () {
 
                     _this.error = false;
@@ -44783,6 +44808,189 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(107)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(109)
+/* template */
+var __vue_template__ = __webpack_require__(110)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\auth\\link.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] link.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2dd66eea", Component.options)
+  } else {
+    hotAPI.reload("data-v-2dd66eea", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(108);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("e7342954", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2dd66eea\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./link.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2dd66eea\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./link.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 109 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        login: false
+    },
+    methods: {
+        logout: function logout() {
+            localStorage.removeItem('modernToken');
+            location.reload();
+        }
+    }
+});
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("div", { staticClass: "btn-group" }, [
+      !_vm.login
+        ? _c(
+            "a",
+            { staticClass: "btn btn-success", attrs: { href: "/login" } },
+            [_vm._v("Залогинеться")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.login
+        ? _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "/register" } },
+            [_vm._v("Зарегестрироваться")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.login
+        ? _c(
+            "a",
+            {
+              staticClass: "btn btn-danger",
+              attrs: { href: "/logout" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.logout($event)
+                }
+              }
+            },
+            [_vm._v("Разлогинеться")]
+          )
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2dd66eea", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <button @click="show = !show">Открыть</button>
+        <div class="form-group">
+            <button class="btn btn-info" @click="show = !show">Открыть</button>
+        </div>
 
         <transition name="fade">
 
@@ -13,7 +15,9 @@
                     </div>
                 </label>
 
-                <button @click.prevent="sendData">Добавить</button>
+                <div class="form-group">
+                    <button class="btn btn-success" @click.prevent="sendData">Добавить</button>
+                </div>
             </form>
 
         </transition>

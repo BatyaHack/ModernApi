@@ -12,28 +12,14 @@ use Mockery\Exception;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
-class PersonalController extends Controller
+class PersonalController extends UserController
 {
     public function index(Request $request)
     {
         $all_personal = Personal::all();
         $columns = \Schema::getColumnListing('personals');
 
-
-        try {
-
-            $header = $request->header('x-custom-token');
-            $current_user = (new UserController(new User()))->checkHeaders($header);
-
-        } catch (TokenInvalidException $error) {
-
-            $current_user = false;
-
-        } catch (TokenExpiredException $ex) {
-
-            $current_user = false;
-
-        }
+        $current_user = $this->getAuthUserHeader($request);
 
         return response()->json([
             $all_personal,

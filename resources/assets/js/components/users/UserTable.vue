@@ -7,6 +7,7 @@
             <user-card :user="currentUser" :admin="admin" @correctUser="updateUser"
                        @deleteUser="deleteUser"></user-card>
             <user-form :fields="fields" @newUser="renderNewUser" v-if="admin"></user-form>
+            <user-link :login="admin"></user-link>
         </div>
 
         <div class="col-md-10">
@@ -31,6 +32,7 @@
     import UserForm from './AddUser.vue';
     import UserCard from './UserCard.vue';
     import UserFind from './UserFind.vue';
+    import UserLink from '../auth/link.vue';
 
     export default {
         data: function () {
@@ -76,7 +78,8 @@
         components: {
             UserForm,
             UserCard,
-            UserFind
+            UserFind,
+            UserLink,
         },
         methods: {
             renderNewUser: function (newUser) {
