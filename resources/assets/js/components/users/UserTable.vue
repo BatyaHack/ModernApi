@@ -11,18 +11,7 @@
         </div>
 
         <div class="col-md-10">
-            <table class="users-table">
-                <thead class="users-table__head">
-                <tr>
-                    <th v-for="field in fields">{{field}}</th>
-                </tr>
-                </thead>
-                <tbody class="users-table__body">
-                <tr v-for="user in users" @click="setCurrentUser">
-                    <td v-for="data in user">{{data}}</td>
-                </tr>
-                </tbody>
-            </table>
+            <UserTable :users="users" :fields="fields" @currentUser="setCurrentUser"></UserTable>
         </div>
 
     </div>
@@ -33,6 +22,7 @@
     import UserCard from './UserCard.vue';
     import UserFind from './UserFind.vue';
     import UserLink from '../auth/link.vue';
+    import UserTable from '../users/table.vue';
 
     export default {
         data: function () {
@@ -80,17 +70,14 @@
             UserCard,
             UserFind,
             UserLink,
+            UserTable,
         },
         methods: {
             renderNewUser: function (newUser) {
                 this.users.push(newUser);
             },
-            setCurrentUser: function (evt) {
-                const curretID = evt.target.parentElement.children[0].innerText;
-
-                this.currentUser = this.users.find((elem, index, arr) => {
-                    return elem.id === +curretID;
-                });
+            setCurrentUser: function (data) {
+                this.currentUser = data;
             },
             needleUsers: function (needleUsers) {
                 this.currentUser = needleUsers[0];
@@ -123,36 +110,5 @@
 
 
 <style lang="scss">
-    .users-table {
-        width: 100%;
-        border-spacing: 0;
 
-        &__head {
-            th {
-                text-align: center;
-            }
-        }
-
-        &__body {
-            border-left: none;
-            border-right: none;
-            td {
-                padding: 20px 0;
-                text-align: center;
-            }
-            tr {
-                cursor: pointer;
-                transition: all 0.3s;
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.1);
-                }
-            }
-            tr:nth-child(odd) {
-                background-color: rgba(0, 0, 0, 0.2);
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.1);
-                }
-            }
-        }
-    }
 </style>

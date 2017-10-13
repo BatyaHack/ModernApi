@@ -14,17 +14,24 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class PersonalController extends UserController
 {
-    public function index(Request $request)
+    public function index(Request $request = null)
     {
         $all_personal = Personal::all();
         $columns = \Schema::getColumnListing('personals');
 
-        $current_user = $this->getAuthUserHeader($request);
+
+
+        if (empty($request)) {
+            dd('here');
+            $current_user = false;
+        } else {
+            $current_user = $this->getAuthUserHeader($request);
+        }
+
 
         return response()->json([
             $all_personal,
             'columns' => $columns,
-            'admin' => true,
             'user' => $current_user,
         ], 200);
     }

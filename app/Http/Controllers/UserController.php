@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use JWTAuth;
-use App\User;
 use JWTAuthException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -19,6 +19,12 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
+    }
+
+    public function index() {
+        $admins = User::all();
+
+        return $admins;
     }
 
     public function register(Request $request)

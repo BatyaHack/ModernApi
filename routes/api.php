@@ -21,6 +21,10 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 });
 
 
+// роуты для работы с админами
+Route::get('admins', 'UserController@index');
+
+
 // роуты для работы с персоналом
 Route::get('personal', 'PersonalController@index');
 Route::get('personal/{persona}', 'PersonalController@show');

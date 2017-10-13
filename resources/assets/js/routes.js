@@ -1,5 +1,6 @@
 export default {
     '/': 'home',
     '/login': 'login',
-    '/register': 'register'
+    '/register': 'register',
+    '/admin': 'admin',
 }
