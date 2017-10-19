@@ -23,6 +23,7 @@
 <script>
 
     import process from '../dateProcess/process.vue';
+    import validation from  '../../utils/validation';
 
     export default {
         data: function () {
@@ -46,23 +47,25 @@
                     password: this.password
                 };
 
+                const valid = new validation();
+                console.log(valid.validation());
 
-                axios.post('/api/auth/login', loginData)
-                    .then((data) => {
-                        const token = data.data;
-                        localStorage.setItem('modernToken', token.token);
-                        this.update = false;
-                        window.location.pathname = '/';
-                    })
-                    .catch((err) => {
-                        this.update = false;
-                        this.error = true;
-                        this.errorMessage = err.message;
-
-                        setTimeout(() => {
-                            this.error = false;
-                        }, 3000);
-                    });
+//                axios.post('/api/auth/login', loginData)
+//                    .then((data) => {
+//                        const token = data.data;
+//                        localStorage.setItem('modernToken', token.token);
+//                        this.update = false;
+//                        window.location.pathname = '/';
+//                    })
+//                    .catch((err) => {
+//                        this.update = false;
+//                        this.error = true;
+//                        this.errorMessage = err.message;
+//
+//                        setTimeout(() => {
+//                            this.error = false;
+//                        }, 3000);
+//                    });
 
             }
 
