@@ -9,7 +9,7 @@
 
         <!---->
 
-        <validation :errors="validateMessages" v-on:validation="rulesValidation"></validation>
+        <validation :errors="validateMessages" :value="{name, email, password}" v-on:validation="rulesValidation"></validation>
 
 
         <div class="form-group">
@@ -44,10 +44,10 @@
     export default {
         data: function () {
             return {
-                name: null,
-                email: null,
-                password: null,
-                repPassword: null,
+                name: '',
+                email: '',
+                password: '',
+                repPassword: '',
 
                 update: false,
                 error: false,
@@ -60,16 +60,16 @@
                 validate: false,
                 validateMessages: {
                     email: {
-                        value: '' || '',
                         message: 'Не корекнтное email',
+                        regular: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                     },
                     name: {
-                        value: '' || '',
-                        message: 'Не корекнтное имя'
+                        message: 'Не корекнтное имя',
+                        regular: /\w{8,16}/,
                     },
                     password: {
-                        value: '' || '',
-                        message: 'Не коректный пароль'
+                        message: 'Не коректный пароль',
+                        regular: /\w{8,16}/,
                     }
                 }
             }

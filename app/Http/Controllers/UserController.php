@@ -6,11 +6,14 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use JWTAuthException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+
+use App\Http\Requests\registrationRequest;
 
 class UserController extends Controller
 {
@@ -27,14 +30,21 @@ class UserController extends Controller
         return $admins;
     }
 
-    public function register(Request $request)
+    public function register(registrationRequest $request)
     {
+
+//        $this->validate($request, [
+//            'name' => 'required|min:8|max:16',
+//            'password' => 'required|min:8|max:16',
+//            'email' => 'required|email',
+//        ]);
 
         $user = $this->user->create([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password'))
         ]);
+
         return response()->json(['status' => true, 'message' => 'User created successfully', 'data' => $user]);
     }
 
