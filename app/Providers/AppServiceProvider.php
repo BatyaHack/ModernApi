@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // можно мереенсти в класс и
+        // Validator::extend('foo', 'FooValidator@validate');
+        // 1 - имя правила, класс и метода
+        Validator::extend('foo', function ($attribute, $value, $parameters, $validator) {
+            return !($value == 'Qwerty1997!');
+        });
     }
 
     /**

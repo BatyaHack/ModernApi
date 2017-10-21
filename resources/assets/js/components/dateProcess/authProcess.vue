@@ -23,7 +23,7 @@
         methods: {
             isValid: function () {
                 return Object.keys(this.validRules).every((key)=> {
-                   return this.validRules.key;
+                   return this.validRules[key];
                 });
             },
             toCount: function () {

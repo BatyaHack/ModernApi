@@ -44674,6 +44674,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         update: null,
         message: null,
         error: false
+    },
+    computed: {
+        getMessage: function getMessage() {
+
+            if (Array.isArray(this.message)) {
+                return this.message.join(': \n');
+            }
+
+            return this.message;
+        }
     }
 
 });
@@ -44725,7 +44735,7 @@ var render = function() {
           ],
           staticClass: "glyphicon glyphicon-remove"
         }),
-        _vm._v("\n\n        " + _vm._s(_vm.message) + "\n\n    ")
+        _vm._v("\n\n        " + _vm._s(_vm.getMessage) + "\n\n    ")
       ])
     ]
   )
@@ -45172,6 +45182,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -45189,9 +45201,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             success: false,
 
             messageProcess: 'Регистрация',
-            messageError: 'Данные указаны невероно',
+            messageError: [],
             messageSuccess: 'Вы успешно зареганы',
 
+            errorsFlag: false,
             validate: false,
             validateMessages: {
                 email: {
@@ -45203,8 +45216,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     regular: /\w{8,16}/
                 },
                 password: {
-                    message: 'Не коректный пароль',
-                    regular: /\w{8,16}/
+                    message: 'Пример корректного пароля. Qwerty1991!',
+                    regular: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/
                 }
             }
         };
@@ -45213,6 +45226,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         rulesValidation: function rulesValidation(rules) {
             this.validate = rules;
         },
+
         toRegister: function toRegister(evt) {
             var _this = this;
 
@@ -45224,9 +45238,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             Promise.resolve().then(function () {
+
                 if (_this.password !== _this.repPassword) {
-                    console.log(_this.email);
-                    console.log(_this.repPassword);
                     throw new Error('Упс ваши пароли не верны!!!');
                 }
 
@@ -45248,15 +45261,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 window.location.pathname = '/';
             }).catch(function (error) {
                 _this.update = false;
-                _this.messageError = error.message;
                 _this.error = true;
+
+                // что бы получить статус error.response.status
+
+                if (error.response.status == 422) {
+
+                    for (var key in error.response.data) {
+
+                        for (var err = 0; err < error.response.data[key].length; err++) {
+                            _this.messageError.push(error.response.data[key][err]);
+                        }
+                    }
+                } else {
+                    _this.messageError = error.message;
+                }
 
                 setTimeout(function () {
 
                     _this.error = false;
                     _this.update = false;
-                }, 3000);
+                    _this.messageError = [];
+                }, 7000);
             });
+        },
+
+        setFlag: function setFlag() {
+            this.errorsFlag = true;
         }
     },
     components: {
@@ -45388,7 +45419,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             return Object.keys(this.validRules).every(function (key) {
-                return _this.validRules.key;
+                return _this.validRules[key];
             });
         },
         toCount: function toCount() {
@@ -45463,6 +45494,14 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("validation", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.errorsFlag,
+            expression: "errorsFlag"
+          }
+        ],
         attrs: {
           errors: _vm.validateMessages,
           value: { name: _vm.name, email: _vm.email, password: _vm.password }
@@ -45486,12 +45525,15 @@ var render = function() {
           attrs: { type: "text", name: "name", id: "name" },
           domProps: { value: _vm.name },
           on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.name = $event.target.value
-            }
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.name = $event.target.value
+              },
+              _vm.setFlag
+            ]
           }
         })
       ]),
@@ -45512,12 +45554,15 @@ var render = function() {
           attrs: { type: "email", name: "email", id: "email" },
           domProps: { value: _vm.email },
           on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.email = $event.target.value
-            }
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.email = $event.target.value
+              },
+              _vm.setFlag
+            ]
           }
         })
       ]),
@@ -45538,12 +45583,15 @@ var render = function() {
           attrs: { type: "password", name: "password", id: "password" },
           domProps: { value: _vm.password },
           on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.password = $event.target.value
-            }
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.password = $event.target.value
+              },
+              _vm.setFlag
+            ]
           }
         })
       ]),
@@ -45566,12 +45614,15 @@ var render = function() {
           attrs: { type: "password", name: "rep_password", id: "rep_password" },
           domProps: { value: _vm.repPassword },
           on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.repPassword = $event.target.value
-            }
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.repPassword = $event.target.value
+              },
+              _vm.setFlag
+            ]
           }
         })
       ]),

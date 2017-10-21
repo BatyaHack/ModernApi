@@ -6,7 +6,7 @@
 
             <span v-show="error" class="glyphicon glyphicon-remove"></span>
 
-            {{message}}
+            {{getMessage}}
 
         </p>
     </div>
@@ -19,6 +19,17 @@
             update: null,
             message: null,
             error: false,
+        },
+        computed: {
+            getMessage: function () {
+
+                if(Array.isArray(this.message)) {
+                    return this.message.join(': \n');
+                }
+
+                return this.message;
+
+            }
         }
 
     }
