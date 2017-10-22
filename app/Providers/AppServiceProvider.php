@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
                 return true; // пароль не входит в топ популярных
 
             } else {
-                return true; // если файла нет не проверяем популярность паролья
+                return true; // если файла нет не проверяем популярность пароля
             }
 
         });

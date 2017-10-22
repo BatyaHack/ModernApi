@@ -44561,17 +44561,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            email: null,
-            password: null,
+            email: '',
+            password: '',
+
             error: false,
             update: false,
-            message: 'Данные в обработке',
-            errorMessage: 'С данными что то не так'
+
+            messageProcess: ['Данные в обработке'],
+            messageError: []
         };
     },
     methods: {
 
         login: function login() {
+            var _this = this;
 
             this.update = true;
 
@@ -44581,24 +44584,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             var valid = new __WEBPACK_IMPORTED_MODULE_1__utils_validation__["a" /* default */]();
-            console.log(valid.validation());
 
-            //                axios.post('/api/auth/login', loginData)
-            //                    .then((data) => {
-            //                        const token = data.data;
-            //                        localStorage.setItem('modernToken', token.token);
-            //                        this.update = false;
-            //                        window.location.pathname = '/';
-            //                    })
-            //                    .catch((err) => {
-            //                        this.update = false;
-            //                        this.error = true;
-            //                        this.errorMessage = err.message;
-            //
-            //                        setTimeout(() => {
-            //                            this.error = false;
-            //                        }, 3000);
-            //                    });
+            axios.post('/api/auth/login', loginData).then(function (data) {
+                var token = data.data;
+                localStorage.setItem('modernToken', token.token);
+                _this.update = false;
+                window.location.pathname = '/';
+            }).catch(function (error) {
+                _this.update = false;
+                _this.error = true;
+
+                if (error.response.status == 422) {
+
+                    for (var key in error.response.data) {
+
+                        for (var err = 0; err < error.response.data[key].length; err++) {
+                            _this.messageError.push(error.response.data[key][err]);
+                        }
+                    }
+                } else {
+
+                    _this.messageError.push(error.message);
+                }
+
+                setTimeout(function () {
+
+                    _this.error = false;
+                    _this.update = false;
+                    _this.messageError = [];
+                }, 7000);
+            });
         }
 
     },
@@ -44667,6 +44682,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
@@ -44674,16 +44693,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         update: null,
         message: null,
         error: false
-    },
-    computed: {
-        getMessage: function getMessage() {
-
-            if (Array.isArray(this.message)) {
-                return this.message.join(': \n');
-            }
-
-            return this.message;
-        }
     }
 
 });
@@ -44711,32 +44720,38 @@ var render = function() {
       class: { error: _vm.error }
     },
     [
-      _c("p", { staticClass: "status__text  status__text--success" }, [
-        _c("span", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.update && !_vm.error,
-              expression: "update && !error"
-            }
-          ],
-          staticClass: "glyphicon glyphicon-repeat"
-        }),
-        _vm._v(" "),
-        _c("span", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.error,
-              expression: "error"
-            }
-          ],
-          staticClass: "glyphicon glyphicon-remove"
-        }),
-        _vm._v("\n\n        " + _vm._s(_vm.getMessage) + "\n\n    ")
-      ])
+      _c(
+        "div",
+        { staticClass: "status__text  status__text--success" },
+        _vm._l(_vm.message, function(text) {
+          return _c("p", [
+            _c("span", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.update && !_vm.error,
+                  expression: "update && !error"
+                }
+              ],
+              staticClass: "glyphicon glyphicon-repeat"
+            }),
+            _vm._v(" "),
+            _c("span", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.error,
+                  expression: "error"
+                }
+              ],
+              staticClass: "glyphicon glyphicon-remove"
+            }),
+            _vm._v("\n\n            " + _vm._s(text) + "\n\n        ")
+          ])
+        })
+      )
     ]
   )
 }
@@ -44820,11 +44835,11 @@ var render = function() {
         { attrs: { action: "#", method: "get" } },
         [
           _c("process", {
-            attrs: { update: _vm.error, message: _vm.errorMessage, error: true }
+            attrs: { update: _vm.error, message: _vm.messageError, error: true }
           }),
           _vm._v(" "),
           _c("process", {
-            attrs: { update: _vm.update, message: _vm.message }
+            attrs: { update: _vm.update, message: _vm.messageProcess }
           }),
           _vm._v(" "),
           _c("div", { staticClass: "form-group" }, [
@@ -44840,7 +44855,12 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { type: "email", id: "email", placeholder: "Мыло" },
+              attrs: {
+                type: "email",
+                id: "email",
+                placeholder: "Мыло",
+                name: "email"
+              },
               domProps: { value: _vm.email },
               on: {
                 input: function($event) {
@@ -44869,7 +44889,8 @@ var render = function() {
               attrs: {
                 type: "password",
                 id: "password",
-                placeholder: "Пароль"
+                placeholder: "Пароль",
+                name: "password"
               },
               domProps: { value: _vm.password },
               on: {
@@ -44886,7 +44907,15 @@ var render = function() {
           _c("div", { staticClass: "form-group" }, [
             _c(
               "button",
-              { staticClass: "btn  btn-success", on: { click: _vm.login } },
+              {
+                staticClass: "btn  btn-success",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.login($event)
+                  }
+                }
+              },
               [_vm._v("Залогинеться")]
             )
           ])
@@ -45184,6 +45213,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -45200,9 +45230,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             error: false,
             success: false,
 
-            messageProcess: 'Регистрация',
+            messageProcess: ['Регистрация'],
             messageError: [],
-            messageSuccess: 'Вы успешно зареганы',
+            messageSuccess: ['Вы успешно зареганы'],
 
             errorsFlag: false,
             validate: false,
@@ -45239,13 +45269,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             Promise.resolve().then(function () {
 
-                if (_this.password !== _this.repPassword) {
-                    throw new Error('Упс ваши пароли не верны!!!');
-                }
-
-                if (!_this.validate) {
-                    throw new Error('Вы не исправили все ошибки!!!');
-                }
+                //                        if (this.password !== this.repPassword) {
+                //                            throw new Error('Упс ваши пароли не верны!!!');
+                //                        }
+                //
+                //                        if (!this.validate) {
+                //                            throw new Error('Вы не исправили все ошибки!!!');
+                //                        }
             }).then(function () {
                 return axios.post('/api/auth/register', data);
             }).then(function () {
@@ -45263,8 +45293,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.update = false;
                 _this.error = true;
 
-                // что бы получить статус error.response.status
-
+                // правильно ли в промисе обработчик ошибок???
                 if (error.response.status == 422) {
 
                     for (var key in error.response.data) {
@@ -45274,7 +45303,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         }
                     }
                 } else {
-                    _this.messageError = error.message;
+
+                    _this.messageError.push(error.message);
                 }
 
                 setTimeout(function () {

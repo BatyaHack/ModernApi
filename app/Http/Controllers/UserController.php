@@ -14,6 +14,8 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 use App\Http\Requests\registrationRequest;
+use App\Http\Requests\loginRequest;
+
 
 class UserController extends Controller
 {
@@ -33,12 +35,6 @@ class UserController extends Controller
     public function register(registrationRequest $request)
     {
 
-//        $this->validate($request, [
-//            'name' => 'required|min:8|max:16',
-//            'password' => 'required|min:8|max:16',
-//            'email' => 'required|email',
-//        ]);
-
         $user = $this->user->create([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
@@ -48,7 +44,7 @@ class UserController extends Controller
         return response()->json(['status' => true, 'message' => 'User created successfully', 'data' => $user]);
     }
 
-    public function login(Request $request)
+    public function login(loginRequest $request)
     {
         $credentials = $request->only('email', 'password');
         $token = null;

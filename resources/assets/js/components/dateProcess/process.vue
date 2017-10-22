@@ -1,14 +1,18 @@
 <template>
     <div class="form-group" :class="{error : error}" v-show="update">
-        <p class="status__text  status__text--success">
+        <div class="status__text  status__text--success">
 
-            <span v-show="update && !error" class="glyphicon glyphicon-repeat"></span>
+            <p v-for="text in message">
 
-            <span v-show="error" class="glyphicon glyphicon-remove"></span>
+                <span v-show="update && !error" class="glyphicon glyphicon-repeat"></span>
 
-            {{getMessage}}
+                <span v-show="error" class="glyphicon glyphicon-remove"></span>
 
-        </p>
+                {{text}}
+
+            </p>
+
+        </div>
     </div>
 </template>
 
@@ -19,17 +23,6 @@
             update: null,
             message: null,
             error: false,
-        },
-        computed: {
-            getMessage: function () {
-
-                if(Array.isArray(this.message)) {
-                    return this.message.join(': \n');
-                }
-
-                return this.message;
-
-            }
         }
 
     }

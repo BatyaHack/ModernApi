@@ -26,7 +26,8 @@
         </div>
         <div class="form-group">
             <label for="password">Пароль</label>
-            <input class="form-control" type="password" name="password" @input="setFlag" id="password" v-model="password">
+            <input class="form-control" type="password" name="password" @input="setFlag" id="password"
+                   v-model="password">
         </div>
         <div class="form-group">
             <label for="rep_password">Повтрите пароль</label>
@@ -55,9 +56,9 @@
                 error: false,
                 success: false,
 
-                messageProcess: 'Регистрация',
+                messageProcess: ['Регистрация'],
                 messageError: [],
-                messageSuccess: 'Вы успешно зареганы',
+                messageSuccess: ['Вы успешно зареганы'],
 
                 errorsFlag: false,
                 validate: false,
@@ -94,13 +95,13 @@
                 Promise.resolve()
                     .then(() => {
 
-                        if (this.password !== this.repPassword) {
-                            throw new Error('Упс ваши пароли не верны!!!');
-                        }
-
-                        if (!this.validate) {
-                            throw new Error('Вы не исправили все ошибки!!!');
-                        }
+//                        if (this.password !== this.repPassword) {
+//                            throw new Error('Упс ваши пароли не верны!!!');
+//                        }
+//
+//                        if (!this.validate) {
+//                            throw new Error('Вы не исправили все ошибки!!!');
+//                        }
                     })
                     .then(() => {
                         return axios.post('/api/auth/register', data)
@@ -121,8 +122,7 @@
                         this.update = false;
                         this.error = true;
 
-                        // что бы получить статус error.response.status
-
+                        // правильно ли в промисе обработчик ошибок???
                         if (error.response.status == 422) {
 
                             for (let key in error.response.data) {
@@ -133,7 +133,9 @@
                             }
 
                         } else {
-                            this.messageError = error.message;
+
+                            this.messageError.push(error.message);
+
                         }
 
 
