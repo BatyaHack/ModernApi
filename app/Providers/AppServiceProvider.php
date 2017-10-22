@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,11 +15,27 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // можно мереенсти в класс и
-        // Validator::extend('foo', 'FooValidator@validate');
-        // 1 - имя правила, класс и метода
-        Validator::extend('foo', function ($attribute, $value, $parameters, $validator) {
-            return !($value == 'Qwerty1997!');
+        Validator::extend('test_popular_password', function ($attribute, $value, $parameters, $validator) {
+
+            if (Storage::exists('password-list.txt')) {
+
+                $password_list = explode(' ', Storage::get('password-list.txt'));
+
+                for ($elem = 0; $elem < count($password_list); $elem++) {
+
+                    if (strtolower($value) === strtolower($password_list[$elem])) {
+                        return false; // пароль входит в топ популярных
+                        break;
+                    }
+
+                }
+
+                return true; // пароль не входит в топ популярных
+
+            } else {
+                return true; // если файла нет не проверяем популярность паролья
+            }
+
         });
     }
 
