@@ -44530,7 +44530,15 @@ exports.push([module.i, "\n.text-error {\n  color: red;\n}\n.status__text--succe
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_validation__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -44568,10 +44576,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             update: false,
 
             messageProcess: ['Данные в обработке'],
-            messageError: []
+            messageError: [],
+
+            errorsFlag: false,
+            validate: false,
+            validateMessages: {
+                email: {
+                    message: 'Не корекнтное email',
+                    regular: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                },
+                password: {
+                    message: 'Такого пароля не может быть',
+                    regular: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/
+                }
+            }
         };
     },
     methods: {
+
+        rulesValidation: function rulesValidation(rules) {
+            this.validate = rules;
+        },
+
+        setFlag: function setFlag() {
+            this.errorsFlag = true;
+        },
 
         login: function login() {
             var _this = this;
@@ -44583,9 +44612,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 password: this.password
             };
 
-            var valid = new __WEBPACK_IMPORTED_MODULE_1__utils_validation__["a" /* default */]();
+            Promise.resolve().then(function () {
 
-            axios.post('/api/auth/login', loginData).then(function (data) {
+                if (!_this.validate) {
+                    throw new Error('Заполните форму');
+                }
+            }).then(function () {
+                axios.post('/api/auth/login', loginData);
+            }).then(function (data) {
                 var token = data.data;
                 localStorage.setItem('modernToken', token.token);
                 _this.update = false;
@@ -44594,7 +44628,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.update = false;
                 _this.error = true;
 
-                if (error.response.status == 422) {
+                if (error.hasOwnProperty('response') && error.response.status == 422) {
 
                     for (var key in error.response.data) {
 
@@ -44618,7 +44652,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     },
     components: {
-        process: __WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue___default.a
+        process: __WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue___default.a,
+        validation: __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue___default.a
     }
 });
 
@@ -44766,61 +44801,7 @@ if (false) {
 }
 
 /***/ }),
-/* 100 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Created by GoldGym on 14.10.2017.
- */
-var validation = function () {
-    function validation() {
-        var email = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-        var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-        var password = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-        _classCallCheck(this, validation);
-
-        this.email = email;
-        this.name = name;
-        this.password = password;
-
-        this._emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        this._nameReg = /[a-z]{6,}/gi;
-        // this._passwordReg = //;
-    }
-
-    _createClass(validation, [{
-        key: "__validFacade",
-        value: function __validFacade() {
-            return {
-                email: this._emailReg.test(this.email),
-                name: this.name,
-                password: this.password
-            };
-        }
-    }, {
-        key: "validation",
-        value: function validation() {
-            var _this = this;
-
-            console.log(this.nameReg);
-            return Object.keys(this.__validFacade()).every(function (key) {
-                return _this.__validFacade()[key];
-            });
-        }
-    }]);
-
-    return validation;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (validation);
-
-/***/ }),
+/* 100 */,
 /* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -44840,6 +44821,22 @@ var render = function() {
           _vm._v(" "),
           _c("process", {
             attrs: { update: _vm.update, message: _vm.messageProcess }
+          }),
+          _vm._v(" "),
+          _c("validation", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.errorsFlag,
+                expression: "errorsFlag"
+              }
+            ],
+            attrs: {
+              errors: _vm.validateMessages,
+              value: { email: _vm.email, password: _vm.password }
+            },
+            on: { validation: _vm.rulesValidation }
           }),
           _vm._v(" "),
           _c("div", { staticClass: "form-group" }, [
@@ -44863,12 +44860,15 @@ var render = function() {
               },
               domProps: { value: _vm.email },
               on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.email = $event.target.value
-                }
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.email = $event.target.value
+                  },
+                  _vm.setFlag
+                ]
               }
             })
           ]),
@@ -44894,12 +44894,15 @@ var render = function() {
               },
               domProps: { value: _vm.password },
               on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.password = $event.target.value
-                }
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.password = $event.target.value
+                  },
+                  _vm.setFlag
+                ]
               }
             })
           ]),
@@ -45269,13 +45272,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             Promise.resolve().then(function () {
 
-                //                        if (this.password !== this.repPassword) {
-                //                            throw new Error('Упс ваши пароли не верны!!!');
-                //                        }
-                //
-                //                        if (!this.validate) {
-                //                            throw new Error('Вы не исправили все ошибки!!!');
-                //                        }
+                if (_this.password !== _this.repPassword) {
+                    throw new Error('Упс ваши пароли не верны!!!');
+                }
+
+                if (!_this.validate) {
+                    throw new Error('Заполните форму');
+                }
             }).then(function () {
                 return axios.post('/api/auth/register', data);
             }).then(function () {
@@ -45293,8 +45296,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.update = false;
                 _this.error = true;
 
-                // правильно ли в промисе обработчик ошибок???
-                if (error.response.status == 422) {
+                if (error.hasOwnProperty('response') && error.response.status == 422) {
 
                     for (var key in error.response.data) {
 

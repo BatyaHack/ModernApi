@@ -95,13 +95,14 @@
                 Promise.resolve()
                     .then(() => {
 
-//                        if (this.password !== this.repPassword) {
-//                            throw new Error('Упс ваши пароли не верны!!!');
-//                        }
-//
-//                        if (!this.validate) {
-//                            throw new Error('Вы не исправили все ошибки!!!');
-//                        }
+                        if (this.password !== this.repPassword) {
+                            throw new Error('Упс ваши пароли не верны!!!');
+                        }
+
+                        if (!this.validate) {
+                            throw new Error('Заполните форму');
+                        }
+
                     })
                     .then(() => {
                         return axios.post('/api/auth/register', data)
@@ -122,8 +123,7 @@
                         this.update = false;
                         this.error = true;
 
-                        // правильно ли в промисе обработчик ошибок???
-                        if (error.response.status == 422) {
+                        if ( error.hasOwnProperty('response') && error.response.status == 422) {
 
                             for (let key in error.response.data) {
 
