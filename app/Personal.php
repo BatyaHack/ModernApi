@@ -10,4 +10,10 @@ class personal extends Authenticatable
     use Notifiable;
 
     protected $guarded = ['id'];
+
+    public function data() {
+
+        return $this->hasMany(AddCol::class);
+
+    }
 }

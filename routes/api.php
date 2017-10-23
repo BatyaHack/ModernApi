@@ -32,3 +32,10 @@ Route::post('personal', 'PersonalController@store');
 Route::put('personal/{persona}', 'PersonalController@update');
 Route::delete('personal/{persona}', 'PersonalController@delete');
 
+
+//Для работы с полями
+Route::get('field', 'FieldController@index');
+Route::get('field/{field}', 'FieldController@show');
+Route::post('field', 'FieldController@store');
+Route::put('field/{field}', 'FieldController@update');
+Route::delete('field/{field}', 'FieldController@delete');
