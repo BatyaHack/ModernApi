@@ -25,6 +25,8 @@
 </template>
 
 <script>
+    import {CONFIG_URLS} from '../../utils/other.js';
+
     export default {
         data: function () {
             return {
@@ -44,7 +46,7 @@
                 });
 
 
-                axios.post('/api/personal', this.user)
+                axios.post(CONFIG_URLS.GET_PERSONAL_URL, this.user)
                     .then((data) => {
 
                         const dataAdapter = {};

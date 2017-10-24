@@ -29,6 +29,7 @@
 
 <script>
     // не становится ли тут компонет завизимым от файла утлиты???
+    import {CONFIG_URLS} from '../../utils/other.js';
 
     export default {
         data: function () {
@@ -73,7 +74,7 @@
                         editData[elem.name] = elem.value; // ойойоой как уязвимо
                     });
 
-                    axios.put(`/api/personal/${userID}`, editData)
+                    axios.put(`${CONFIG_URLS.GET_PERSONAL_URL}/${userID}`, editData)
                         .then((data) => {
                             return data.data;
                         })
@@ -111,7 +112,7 @@
             },
             deleteUser: function () {
                 this.update = true;
-                axios.delete(`/api/personal/${this.user.id}`)
+                axios.delete(`${CONFIG_URLS.GET_PERSONAL_URL}/${this.user.id}`)
                     .then(() => {
                         this.update = false;
                         this.$emit('deleteUser', this.user.id);

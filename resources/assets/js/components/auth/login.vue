@@ -33,7 +33,7 @@
     import validation from '../dateProcess/authProcess.vue';
     import goLogin from '../../utils/login.js';
     import GoValidator from '../../utils/validation.js';
-    import {clearData} from '../../utils/other.js';
+    import {clearData, CONFIG_URLS} from '../../utils/other.js';
 
 
     export default {
@@ -91,7 +91,7 @@
 
                     })
                     .then(()=> {
-                        return axios.post('/api/auth/login', loginData);
+                        return axios.post(CONFIG_URLS.LOGIN_URL, loginData);
                     })
                     .then((data) => {
                         goLogin(data);

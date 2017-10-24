@@ -23,6 +23,9 @@
     import UserFind from './UserFind.vue';
     import UserLink from '../auth/link.vue';
     import UserTable from '../users/table.vue';
+    import {CONFIG_URLS} from '../../utils/other.js';
+
+
 
     export default {
         data: function () {
@@ -42,7 +45,7 @@
 
             axios({
                 method: 'GET',
-                url: '/api/personal',
+                url: CONFIG_URLS.GET_PERSONAL_URL,
                 headers: {
                     'x-custom-token' : token,
                 }
