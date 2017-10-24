@@ -31,6 +31,9 @@
 
     import process from '../dateProcess/process.vue';
     import validation from '../dateProcess/authProcess.vue';
+    import goLogin from '../../utils/login.js';
+    import GoValidator from '../../utils/validation.js';
+    import {clearData} from '../../utils/other.js';
 
 
     export default {
@@ -88,43 +91,20 @@
 
                     })
                     .then(()=> {
-                        axios.post('/api/auth/login', loginData)
+                        return axios.post('/api/auth/login', loginData);
                     })
                     .then((data) => {
-                        const token = data.data;
-                        localStorage.setItem('modernToken', token.token);
-                        this.update = false;
-                        window.location.pathname = '/';
+                        goLogin(data);
                     })
                     .catch((error) => {
                         this.update = false;
                         this.error = true;
 
+                        const validation = new GoValidator(error);
+                        this.messageError = validation.setError();
 
-                        if (error.hasOwnProperty('response') && error.response.status == 422) {
-
-                            for (let key in error.response.data) {
-
-                                for (let err = 0; err < error.response.data[key].length; err++) {
-                                    this.messageError.push(error.response.data[key][err]);
-                                }
-                            }
-
-                        } else {
-
-                            this.messageError.push(error.message);
-
-                        }
-
-
-                        setTimeout(() => {
-
-                            this.error = false;
-                            this.update = false;
-                            this.messageError = [];
-
-                        }, 7000);
-                    });
+                        clearData(this.messageError, this, 'update', 'error'); // че бля. this. Вот это я намутил...
+            });
 
             }
 

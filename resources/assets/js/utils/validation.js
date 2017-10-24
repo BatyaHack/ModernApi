@@ -1,32 +1,44 @@
-/**
- * Created by GoldGym on 14.10.2017.
- */
-class validation {
+// может замутить передачу ошибок через метод???
+// и воспользоваться патерном синглтон для класса???
 
-    constructor(email = true, name = true , password = true) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
+export default class GoValidator {
 
-        this._emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        this._nameReg = /[a-z]{6,}/gi;
-        // this._passwordReg = //;
+    constructor(error) {
+        this.error = error;
     }
 
-    __validFacade () {
-        return {
-            email: this._emailReg.test(this.email),
-            name: this.name,
-            password: this.password,
+    setError() {
+
+        const messagesArray = [];
+
+        if ( this._checkResponse() && this._checkStatus() ) {
+
+            for (let key in this.error.response.data) {
+
+                for (let err = 0; err < this.error.response.data[key].length; err++) {
+                    messagesArray.push(this.error.response.data[key][err]);
+                }
+
+            }
+            // Тут можно убрать else. Если возвращать массив в if, но стоит ли жертвовать логикой ради пары строк???
+        } else {
+            messagesArray.push(this.error.message);
         }
+
+        return messagesArray;
+
     }
 
-    validation() {
-        console.log(this.nameReg);
-        return Object.keys(this.__validFacade()).every((key) => {
-           return this.__validFacade()[key];
-        });
+    _checkResponse() {
+
+        return this.error.hasOwnProperty('response');
+
     }
+
+    _checkStatus() {
+
+        const badValidation = 422; // если с валидаций не прошла
+        return (+this.error.response.status) === 422;
+    }
+
 }
-
-export default validation;
