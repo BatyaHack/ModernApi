@@ -72,7 +72,7 @@
                     },
                     name: {
                         message: 'Не корекнтное имя',
-                        regular: /\w{8,16}/,
+                        regular: /^\w{8,16}$/,
                     },
                     password: {
                         message: 'Пример корректного пароля. Qwerty1991!',

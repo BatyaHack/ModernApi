@@ -20,5 +20,6 @@ export const CONFIG_URLS = {
     REGISTER_URL: '/api/auth/register',
     GET_ADMINS_URL: '/api/admins',
     GET_PERSONAL_URL: '/api/personal',
+    ADD_FIELD_URL: '/api/field',
 
 };
