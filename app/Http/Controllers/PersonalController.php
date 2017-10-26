@@ -19,35 +19,29 @@ class PersonalController extends UserController
     public function index(Request $request = null)
     {
         $all_personal = Personal::all();
-        $add_data = [];
+        $some = [];
+        $key = [];
+        $full_helper_data = [];
 
-        for ($i = 0; $i < count($all_personal); $i++) {
+        for ($user = 0; $user < count($all_personal); $user++) {
 
-            // чееее уже два запроса. Может ложить в меременную?!
-            $add_data[] = $all_personal[$i]->data->pluck('data');
-            $add_id[] = $all_personal[$i]->data->pluck('field_id');
-            $add_key = [];
-
-            for($i = 0; $i < count($add_id); $i++) {
-
-
-                for ($j = 0; $j < count($add_id[$i]); $j++) {
-
-                  $add_key[] = Field::find($add_id[$i][$j]);
-
-                }
-
-            }
-
-            // обойти дополнительные ключи
-            // вставить доп ключ и доп дату
-
-            // типа так
-            $all_personal[$i]['some'] = 123;
+            $full_helper_data[] = $all_personal[$user]->data;
 
         }
 
+        for ($data = 0; $data < count($full_helper_data); $data++) {
+
+            $some[] = $full_helper_data[$data]->pluck('data');
+
+        }
+
+        for ($i = 0; $i < count($all_personal); $user++) {
+
+            array_merge($all_personal[$i], $some[$i]);
+        }
+
         return $all_personal;
+
 
 
         if (empty($request)) {
