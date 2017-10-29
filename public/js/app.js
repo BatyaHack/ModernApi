@@ -470,7 +470,7 @@ module.exports = function normalizeComponent (
 "use strict";
 
 
-var bind = __webpack_require__(9);
+var bind = __webpack_require__(10);
 var isBuffer = __webpack_require__(28);
 
 /*global toString:true*/
@@ -831,10 +831,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(10);
+    adapter = __webpack_require__(11);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(10);
+    adapter = __webpack_require__(11);
   }
   return adapter;
 }
@@ -1009,6 +1009,66 @@ module.exports = Component.exports
 
 /***/ }),
 /* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// может замутить передачу ошибок через метод???
+// и воспользоваться патерном синглтон для класса???
+
+var GoValidator = function () {
+    function GoValidator(error) {
+        _classCallCheck(this, GoValidator);
+
+        this.error = error;
+    }
+
+    _createClass(GoValidator, [{
+        key: 'setError',
+        value: function setError() {
+
+            var messagesArray = [];
+
+            if (this._checkResponse() && this._checkStatus()) {
+
+                for (var key in this.error.response.data) {
+
+                    for (var err = 0; err < this.error.response.data[key].length; err++) {
+                        messagesArray.push(this.error.response.data[key][err]);
+                    }
+                }
+                // Тут можно убрать else. Если возвращать массив в if, но стоит ли жертвовать логикой ради пары строк???
+            } else {
+                messagesArray.push(this.error.message);
+            }
+
+            return messagesArray;
+        }
+    }, {
+        key: '_checkResponse',
+        value: function _checkResponse() {
+
+            return this.error.hasOwnProperty('response');
+        }
+    }, {
+        key: '_checkStatus',
+        value: function _checkStatus() {
+
+            var badValidation = 422; // если с валидаций не прошла
+            return +this.error.response.status === 422;
+        }
+    }]);
+
+    return GoValidator;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (GoValidator);
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1035,7 +1095,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1053,7 +1113,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1064,7 +1124,7 @@ var settle = __webpack_require__(32);
 var buildURL = __webpack_require__(34);
 var parseHeaders = __webpack_require__(35);
 var isURLSameOrigin = __webpack_require__(36);
-var createError = __webpack_require__(11);
+var createError = __webpack_require__(12);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(37);
 
 module.exports = function xhrAdapter(config) {
@@ -1240,7 +1300,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1265,7 +1325,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1277,7 +1337,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1303,7 +1363,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -1353,7 +1413,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -1403,7 +1463,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -1453,7 +1513,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1463,66 +1523,6 @@ function goLogin(data) {
     localStorage.setItem('modernToken', token.token);
     window.location.pathname = '/';
 }
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// может замутить передачу ошибок через метод???
-// и воспользоваться патерном синглтон для класса???
-
-var GoValidator = function () {
-    function GoValidator(error) {
-        _classCallCheck(this, GoValidator);
-
-        this.error = error;
-    }
-
-    _createClass(GoValidator, [{
-        key: 'setError',
-        value: function setError() {
-
-            var messagesArray = [];
-
-            if (this._checkResponse() && this._checkStatus()) {
-
-                for (var key in this.error.response.data) {
-
-                    for (var err = 0; err < this.error.response.data[key].length; err++) {
-                        messagesArray.push(this.error.response.data[key][err]);
-                    }
-                }
-                // Тут можно убрать else. Если возвращать массив в if, но стоит ли жертвовать логикой ради пары строк???
-            } else {
-                messagesArray.push(this.error.message);
-            }
-
-            return messagesArray;
-        }
-    }, {
-        key: '_checkResponse',
-        value: function _checkResponse() {
-
-            return this.error.hasOwnProperty('response');
-        }
-    }, {
-        key: '_checkStatus',
-        value: function _checkStatus() {
-
-            var badValidation = 422; // если с валидаций не прошла
-            return +this.error.response.status === 422;
-        }
-    }]);
-
-    return GoValidator;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (GoValidator);
 
 /***/ }),
 /* 19 */
@@ -1556,7 +1556,7 @@ window.Vue = __webpack_require__(46);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('homePage', __webpack_require__(14));
+Vue.component('homePage', __webpack_require__(15));
 
 var app = new Vue({
     el: '#app',
@@ -1566,7 +1566,7 @@ var app = new Vue({
     computed: {
         viewComputed: function viewComputed() {
             var matchingView = __WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* default */][this.currentRoute];
-            return matchingView ? __webpack_require__(82)("./" + matchingView + '.vue') : __webpack_require__(16);
+            return matchingView ? __webpack_require__(82)("./" + matchingView + '.vue') : __webpack_require__(17);
         }
     },
     render: function render(h) {
@@ -18726,7 +18726,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(23)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(23)(module)))
 
 /***/ }),
 /* 23 */
@@ -31413,7 +31413,7 @@ module.exports = __webpack_require__(27);
 
 
 var utils = __webpack_require__(3);
-var bind = __webpack_require__(9);
+var bind = __webpack_require__(10);
 var Axios = __webpack_require__(29);
 var defaults = __webpack_require__(5);
 
@@ -31448,9 +31448,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(13);
+axios.Cancel = __webpack_require__(14);
 axios.CancelToken = __webpack_require__(44);
-axios.isCancel = __webpack_require__(12);
+axios.isCancel = __webpack_require__(13);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -31800,7 +31800,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(11);
+var createError = __webpack_require__(12);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -32219,7 +32219,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(3);
 var transformData = __webpack_require__(41);
-var isCancel = __webpack_require__(12);
+var isCancel = __webpack_require__(13);
 var defaults = __webpack_require__(5);
 
 /**
@@ -32372,7 +32372,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(13);
+var Cancel = __webpack_require__(14);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -42661,7 +42661,7 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
 /* 47 */
@@ -42875,7 +42875,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__UserFind_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__UserFind_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__auth_link_vue__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__auth_link_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__auth_link_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__users_table_vue__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__users_table_vue__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__users_table_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__users_table_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_other_js__ = __webpack_require__(4);
 //
@@ -44012,6 +44012,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            dataUser: null
+        };
+    },
+
     props: ['users', 'fields'],
     methods: {
         setCurrentUser: function setCurrentUser(evt) {
@@ -44022,6 +44028,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
 
             this.$emit('currentUser', currentUser);
+        }
+    },
+    computed: {
+        getUsers: function getUsers() {
+
+            if (this.users === null) {
+                return [];
+            }
+
+            return this.users.map(function (elem, index, arr) {
+
+                var self = elem;
+                var all_key = [];
+
+                elem.data.forEach(function (elem, index, arr) {
+                    self[elem.field.name] = elem.data;
+                    all_key.push(elem.field.name); // заполняю массив всеми кеями что есть
+                });
+
+                delete self.data;
+
+                return self;
+            });
         }
     }
 });
@@ -44047,7 +44076,7 @@ var render = function() {
     _c(
       "tbody",
       { staticClass: "users-table__body" },
-      _vm._l(_vm.users, function(user) {
+      _vm._l(_vm.getUsers, function(user) {
         return _c(
           "tr",
           { on: { click: _vm.setCurrentUser } },
@@ -44159,10 +44188,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./404.vue": 16,
+	"./404.vue": 17,
 	"./admin.vue": 87,
 	"./field.vue": 92,
-	"./home.vue": 14,
+	"./home.vue": 15,
 	"./login.vue": 110,
 	"./register.vue": 120
 };
@@ -44347,7 +44376,7 @@ exports.push([module.i, "\n.nav__panel {\n  background: rgba(22, 38, 23, 0.33);\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_users_table_vue__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_users_table_vue__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_users_table_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_users_table_vue__);
 //
 //
@@ -44705,7 +44734,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_validation_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_validation_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_other_js__ = __webpack_require__(4);
 //
 //
@@ -45452,8 +45481,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_login_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_validation_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_login_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_validation_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_other_js__ = __webpack_require__(4);
 //
 //
@@ -45939,8 +45968,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__dateProcess_process_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dateProcess_authProcess_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_login_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_validation_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_login_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_validation_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_other_js__ = __webpack_require__(4);
 //
 //

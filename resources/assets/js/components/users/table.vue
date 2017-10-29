@@ -6,7 +6,7 @@
         </tr>
         </thead>
         <tbody class="users-table__body">
-        <tr v-for="user in users" @click="setCurrentUser">
+        <tr v-for="user in getUsers" @click="setCurrentUser">
             <td v-for="data in user">{{data}}</td>
         </tr>
         </tbody>
@@ -15,16 +15,47 @@
 
 <script>
     export default {
+        data() {
+            return {
+                dataUser: null,
+            }
+        },
         props: ['users', 'fields'],
         methods: {
             setCurrentUser: function (evt) {
                 const currentID = evt.target.parentElement.children[0].innerText;
 
-                const currentUser =  this.users.find((elem, index, arr) => {
+                const currentUser = this.users.find((elem, index, arr) => {
                     return elem.id === +currentID;
                 });
 
                 this.$emit('currentUser', currentUser);
+            }
+        },
+        computed: {
+            getUsers: function () {
+
+                if (this.users === null) {
+                    return [];
+                }
+
+                return this.users.map((elem, index, arr) => {
+
+                    let self = elem;
+                    let all_key = [];
+
+                    elem.data.forEach((elem, index, arr) => {
+                        self[elem.field.name] = elem.data;
+                        all_key.push(elem.field.name); // заполняю массив всеми кеями что есть
+                    });
+
+                    delete self.data;
+
+                    return self;
+
+                });
+
+
             }
         }
     }
