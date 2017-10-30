@@ -8,12 +8,11 @@
 
             <form action="/api/personal" method="post" v-if="show">
 
-                <label class="user-block" v-for="field in fields">
-                    <div class="user-wrapper" v-if="field != 'created_at' && field != 'updated_at' && field != 'id'">
-                        <span class="user-block__label">{{field}}</span>
-                        <input class="user-block__input" type="text" :name="field">
-                    </div>
-                </label>
+                <div class="form-group" v-for="field in fields" v-if="field != 'created_at' && field != 'updated_at' && field != 'id'">
+                    <label :for="field">{{field}}</label>
+                    <input type="text" class="form-control" :id="field" placeholder="Заполните поле" :name="field">
+                </div>
+
 
                 <div class="form-group">
                     <button class="btn btn-success" @click.prevent="sendData">Добавить</button>

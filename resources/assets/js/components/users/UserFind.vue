@@ -1,5 +1,7 @@
 <template>
-    <input type="text" class="user-input" placeholder="Find User ..." v-model="string" @input="getListUser">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Find User ..." v-model="string" @input="getListUser">
+    </div>
 </template>
 
 <script>
@@ -53,7 +55,5 @@
 </script>
 
 <style lang="scss">
-    .user-input {
-        width: 100%;
-    }
+
 </style>

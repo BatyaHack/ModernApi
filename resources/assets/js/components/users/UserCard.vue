@@ -1,6 +1,5 @@
 <template>
     <div class="user-class">
-        <img src="" alt="Фото пользователя">
         <template v-if="status === formStatus.EDIT">
             <div class="user-class__info" v-for="(info, key) in user">
                 <span class="user-class__key">{{key}}</span>

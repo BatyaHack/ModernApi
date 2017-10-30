@@ -19,6 +19,9 @@ class PersonalController extends UserController
     public function index(Request $request = null)
     {
         $all_personal = Personal::with('data.field')->get();
+        $columns = \Schema::getColumnListing('personals');
+        $helper_columns = Field::all()->pluck('name')->toArray();
+        $full_columns = array_merge($columns, $helper_columns);
 
         if (empty($request)) {
             dd('here');
@@ -29,7 +32,7 @@ class PersonalController extends UserController
 
         return response()->json([
             $all_personal,
-            'columns' => [],
+            'columns' => $full_columns,
             'user' => $current_user,
         ], 200);
     }

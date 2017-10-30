@@ -65,7 +65,6 @@
                     }
 
                     this.showFind = true;
-                    this.currentUser = this.users[0];
                 })
         },
         components: {

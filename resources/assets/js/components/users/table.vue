@@ -1,11 +1,11 @@
 <template>
-    <table class="users-table">
-        <thead class="users-table__head">
+    <table class="table table-striped">
+        <thead>
         <tr>
             <th v-for="field in fields">{{field}}</th>
         </tr>
         </thead>
-        <tbody class="users-table__body">
+        <tbody>
         <tr v-for="user in getUsers" @click="setCurrentUser">
             <td v-for="data in user">{{data}}</td>
         </tr>
@@ -24,6 +24,15 @@
         props: ['users', 'fields'],
         methods: {
             setCurrentUser: function (evt) {
+
+                const allTr = document.querySelectorAll('tr');
+
+                [...allTr].forEach((elem, index, arr) => {
+                    elem.classList.remove('current-user');
+                });
+
+                evt.target.parentElement.classList.add('current-user');
+
                 const currentID = evt.target.parentElement.children[0].innerText;
 
                 const currentUser = this.users.find((elem, index, arr) => {
@@ -34,6 +43,7 @@
             }
         },
         computed: {
+            // ЭТО ТАКАЯ ПАРАША ШО Я ...
             getUsers: function () {
 
                 if (this.users === null) {
@@ -54,17 +64,17 @@
 
                 });
 
-               all_key.forEach((elem, index, arr) => {
+                all_key.forEach((elem, index, arr) => {
 
-                   let key = elem;
+                    let key = elem;
 
-                   fullUsers.forEach((elem, index, arr) => {
+                    fullUsers.forEach((elem, index, arr) => {
 
                         elem[key] = ' ';
 
-                   });
+                    });
 
-               });
+                });
 
                 fullUsers.forEach((elem, index, arr) => {
 
@@ -88,35 +98,21 @@
 </script>
 
 <style lang="scss">
-    .users-table {
-        width: 100%;
-        border-spacing: 0;
+    .table {
+        tbody {
 
-        &__head {
-            th {
-                text-align: center;
-            }
-        }
-
-        &__body {
-            border-left: none;
-            border-right: none;
-            td {
-                padding: 20px 0;
-                text-align: center;
-            }
             tr {
                 cursor: pointer;
-                transition: all 0.3s;
+
                 &:hover {
-                    background-color: rgba(0, 0, 0, 0.1);
+                    color: #ffffff;
+                    background: rgba(0, 0, 0, 0.3);
                 }
             }
-            tr:nth-child(odd) {
-                background-color: rgba(0, 0, 0, 0.2);
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.1);
-                }
+
+            .current-user {
+                color: #ffffff !important;
+                background: rgba(0, 0, 0, 0.3) !important;
             }
         }
     }
