@@ -6,7 +6,7 @@
         </tr>
         </thead>
         <tbody class="users-table__body">
-        <tr v-for="user in users" @click="setCurrentUser">
+        <tr v-for="user in getUser" @click="setCurrentUser">
             <td v-for="data in user">{{data}}</td>
         </tr>
         </tbody>
@@ -15,7 +15,21 @@
 
 <script>
     export default {
+        data: function () {
+            return {
+                userData: null,
+            }
+        },
         props: ['users', 'fields'],
+        computed: {
+
+            getUser: function (){
+
+                console.log(this.users);
+
+            }
+
+        },
         methods: {
             setCurrentUser: function (evt) {
                 const currentID = evt.target.parentElement.children[0].innerText;
