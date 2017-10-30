@@ -20,8 +20,6 @@ class PersonalController extends UserController
     {
         $all_personal = Personal::with('data.field')->get();
 
-
-
         if (empty($request)) {
             dd('here');
             $current_user = false;

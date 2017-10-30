@@ -6,7 +6,7 @@
         </tr>
         </thead>
         <tbody class="users-table__body">
-        <tr v-for="user in getUser" @click="setCurrentUser">
+        <tr v-for="user in getUsers" @click="setCurrentUser">
             <td v-for="data in user">{{data}}</td>
         </tr>
         </tbody>
@@ -15,30 +15,73 @@
 
 <script>
     export default {
-        data: function () {
+
+        data() {
             return {
-                userData: null,
+                dataUser: null,
             }
         },
         props: ['users', 'fields'],
-        computed: {
-
-            getUser: function (){
-
-                console.log(this.users);
-
-            }
-
-        },
         methods: {
             setCurrentUser: function (evt) {
                 const currentID = evt.target.parentElement.children[0].innerText;
 
-                const currentUser =  this.users.find((elem, index, arr) => {
+                const currentUser = this.users.find((elem, index, arr) => {
                     return elem.id === +currentID;
                 });
 
                 this.$emit('currentUser', currentUser);
+            }
+        },
+        computed: {
+            getUsers: function () {
+
+                if (this.users === null) {
+                    return [];
+                }
+
+                let all_key = [];
+
+                let fullUsers = this.users.map((elem, index, arr) => {
+
+                    let self = elem;
+
+                    elem.data.forEach((elem, index, arr) => {
+                        all_key.push(elem.field.name); // заполняю массив всеми кеями что есть
+                    });
+
+                    return self;
+
+                });
+
+               all_key.forEach((elem, index, arr) => {
+
+                   let key = elem;
+
+                   fullUsers.forEach((elem, index, arr) => {
+
+                        elem[key] = ' ';
+
+                   });
+
+               });
+
+                fullUsers.forEach((elem, index, arr) => {
+
+                    let self = elem;
+
+                    elem.data.forEach((elem, index, arr) => {
+
+                        self[elem.field.name] = elem.data;
+
+                    });
+
+                    delete self.data;
+
+                });
+
+                return fullUsers;
+
             }
         }
     }

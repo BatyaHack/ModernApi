@@ -44667,18 +44667,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            userData: null
+            dataUser: null
         };
     },
+
     props: ['users', 'fields'],
-    computed: {
-
-        getUser: function getUser() {
-
-            console.log(this.users);
-        }
-
-    },
     methods: {
         setCurrentUser: function setCurrentUser(evt) {
             var currentID = evt.target.parentElement.children[0].innerText;
@@ -44688,6 +44681,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
 
             this.$emit('currentUser', currentUser);
+        }
+    },
+    computed: {
+        getUsers: function getUsers() {
+
+            if (this.users === null) {
+                return [];
+            }
+
+            var all_key = [];
+
+            var fullUsers = this.users.map(function (elem, index, arr) {
+
+                var self = elem;
+
+                elem.data.forEach(function (elem, index, arr) {
+                    all_key.push(elem.field.name); // заполняю массив всеми кеями что есть
+                });
+
+                return self;
+            });
+
+            all_key.forEach(function (elem, index, arr) {
+
+                var key = elem;
+
+                fullUsers.forEach(function (elem, index, arr) {
+
+                    elem[key] = ' ';
+                });
+            });
+
+            fullUsers.forEach(function (elem, index, arr) {
+
+                var self = elem;
+
+                elem.data.forEach(function (elem, index, arr) {
+
+                    self[elem.field.name] = elem.data;
+                });
+
+                delete self.data;
+            });
+
+            return fullUsers;
         }
     }
 });
@@ -44713,7 +44751,7 @@ var render = function() {
     _c(
       "tbody",
       { staticClass: "users-table__body" },
-      _vm._l(_vm.getUser, function(user) {
+      _vm._l(_vm.getUsers, function(user) {
         return _c(
           "tr",
           { on: { click: _vm.setCurrentUser } },
