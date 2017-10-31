@@ -19,6 +19,7 @@ class PersonalController extends UserController
     public function index(Request $request = null)
     {
         $all_personal = Personal::with('data.field')->get();
+
         $columns = \Schema::getColumnListing('personals');
         $helper_columns = Field::all()->pluck('name')->toArray();
         $full_columns = array_merge($columns, $helper_columns);
@@ -51,6 +52,18 @@ class PersonalController extends UserController
 
     public function update(Request $request, Personal $persona)
     {
+
+//        $key_array  = [];
+//
+//        foreach ($request->all() as $key => $value) {
+//
+//            array_push($key_array, $key);
+//
+//        }
+//
+//        $field_id = Field::where('name', $key_array)->pluck('id');
+//
+//        dd($field_id);
 
         $persona->update($request->all());
 

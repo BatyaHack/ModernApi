@@ -19,6 +19,7 @@
         data() {
             return {
                 dataUser: null,
+                firstDataFlag: false,
             }
         },
         props: ['users', 'fields'],
@@ -50,7 +51,12 @@
                     return [];
                 }
 
+                if(this.firstDataFlag) {
+                    return this.users;
+                }
+
                 let all_key = [];
+
 
                 let fullUsers = this.users.map((elem, index, arr) => {
 
@@ -90,6 +96,7 @@
 
                 });
 
+                this.firstDataFlag = true;
                 return fullUsers;
 
             }
