@@ -53,17 +53,17 @@ class PersonalController extends UserController
     public function update(Request $request, Personal $persona)
     {
 
-//        $key_array  = [];
-//
-//        foreach ($request->all() as $key => $value) {
-//
-//            array_push($key_array, $key);
-//
-//        }
-//
-//        $field_id = Field::where('name', $key_array)->pluck('id');
-//
-//        dd($field_id);
+        $key_array  = [];
+
+        foreach ($request->all() as $key => $value) {
+
+           array_push($key_array, $key);
+
+        }
+
+        $field_id = Field::where('name', $key_array)->pluck('id');
+
+        dd($field_id);
 
         $persona->update($request->all());
 

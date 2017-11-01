@@ -7,7 +7,6 @@
             <user-card :user="currentUser" :admin="admin" @correctUser="updateUser"
                        @deleteUser="deleteUser"></user-card>
             <user-form :fields="fields" @newUser="renderNewUser" v-if="admin"></user-form>
-            <user-link :login="admin"></user-link>
         </div>
 
         <div class="col-md-10">
@@ -24,8 +23,6 @@
     import UserLink from '../auth/link.vue';
     import UserTable from '../users/table.vue';
     import {CONFIG_URLS} from '../../utils/other.js';
-
-
 
     export default {
         data: function () {
@@ -58,10 +55,12 @@
                     this.fields = data.columns;
                     this.users = data[0];
 
-                    if(data.user !== false) {
+                    if(data.user.original.result) {
+                        this.$root.$emit('someEvent', true, data.user.original.result);
                         this.admin = data.user.original.result.id;
                     } else {
-                        this.admin = data.user;
+                        this.$root.$emit('someEvent', false);
+                        this.admin = false;
                     }
 
                     this.showFind = true;
