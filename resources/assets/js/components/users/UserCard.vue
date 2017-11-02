@@ -73,6 +73,7 @@
                         editData[elem.name] = elem.value; // ойойоой как уязвимо
                     });
 
+
                     axios.put(`${CONFIG_URLS.GET_PERSONAL_URL}/${userID}`, editData)
                         .then((data) => {
                             return data.data;

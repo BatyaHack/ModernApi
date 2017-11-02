@@ -43782,7 +43782,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
             var self = this.user;
 
-            var inputs = document.querySelectorAll('.user-block__input');
+            var inputs = document.querySelectorAll('.jsNewUser');
             [].concat(_toConsumableArray(inputs)).forEach(function (elem, index, arr) {
                 self[elem.name] = elem.value;
             });
@@ -43849,7 +43849,7 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("input", {
-                          staticClass: "form-control",
+                          staticClass: "form-control  jsNewUser",
                           attrs: {
                             type: "text",
                             id: field,

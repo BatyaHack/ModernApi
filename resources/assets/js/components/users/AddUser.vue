@@ -10,7 +10,7 @@
 
                 <div class="form-group" v-for="field in fields" v-if="field != 'created_at' && field != 'updated_at' && field != 'id'">
                     <label :for="field">{{field}}</label>
-                    <input type="text" class="form-control" :id="field" placeholder="Заполните поле" :name="field">
+                    <input type="text" class="form-control  jsNewUser" :id="field" placeholder="Заполните поле" :name="field">
                 </div>
 
 
@@ -39,11 +39,10 @@
 
                 const self = this.user;
 
-                const inputs = document.querySelectorAll('.user-block__input');
+                const inputs = document.querySelectorAll('.jsNewUser');
                 [...inputs].forEach((elem, index, arr) => {
                     self[elem.name] = elem.value;
                 });
-
 
                 axios.post(CONFIG_URLS.GET_PERSONAL_URL, this.user)
                     .then((data) => {

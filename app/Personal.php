@@ -9,7 +9,7 @@ class personal extends Authenticatable
 {
     use Notifiable;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['name', 'family', 'patronymic', 'created_at', 'updated_at'];
 
     public function data() {
 

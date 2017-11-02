@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Addcol;
+use App\UserCore\PersonalHelper\PersonalUpdate;
 use App\Field;
-use Error;
 use Illuminate\Http\Request;
 use App\Personal;
-use App\User;
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Cookie;
-use Mockery\Exception;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Illuminate\Support\Facades\DB;
+
 
 class PersonalController extends UserController
 {
+
     public function index(Request $request = null)
     {
         $all_personal = Personal::with('data.field')->get();
@@ -45,25 +41,17 @@ class PersonalController extends UserController
 
     public function store(Request $request)
     {
-        $new_persona = Personal::create($request->all());
+        return DB::transaction(function () use ($request) {
+            $new_persona = Personal::create($request->all());
 
-        return $new_persona;
+            return $new_persona;
+        });
     }
 
     public function update(Request $request, Personal $persona)
     {
-
-        $key_array  = [];
-
-        foreach ($request->all() as $key => $value) {
-
-           array_push($key_array, $key);
-
-        }
-
-        $field_id = Field::where('name', $key_array)->pluck('id');
-
-        dd($field_id);
+        $a = new PersonalUpdate($request, $persona);
+        $a->updateCustomKey();
 
         $persona->update($request->all());
 
