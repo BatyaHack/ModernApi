@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\DB;
 class PersonalController extends UserController
 {
 
+    protected $personalHelper;
+
+    public function __construct(PersonalUpdate $personalHelper)
+    {
+        $this->personalHelper = $personalHelper;
+    }
+
     public function index(Request $request = null)
     {
         $all_personal = Personal::with('data.field')->get();
@@ -42,27 +49,27 @@ class PersonalController extends UserController
     public function store(Request $request)
     {
         return DB::transaction(function () use ($request) {
+
             $new_persona = Personal::create($request->all());
 
-            return $new_persona;
+            $a = new $this->personalHelper($request, $new_persona);
+            $a->updateCustomKey();
+            return $a->infoMerge($new_persona);
         });
     }
 
     public function update(Request $request, Personal $persona)
     {
-        $a = new PersonalUpdate($request, $persona);
+        $a = new $this->personalHelper($request, $persona);
         $a->updateCustomKey();
-
         $persona->update($request->all());
-
-        return response()->json($persona, 200);
+        $edit_persona = $a->infoMerge($persona);
+        return response()->json($edit_persona, 200);
     }
 
     public function delete(Personal $persona)
     {
-
         $persona->delete();
-
         return response()->json(null, 200);
     }
 }

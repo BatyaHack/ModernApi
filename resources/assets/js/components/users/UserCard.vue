@@ -79,6 +79,7 @@
                             return data.data;
                         })
                         .then((data) => {
+                                console.log(data);
                                 this.$emit('correctUser', data);
                                 this.update = false;
                             }

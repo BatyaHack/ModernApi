@@ -58,4 +58,7 @@ class PersonalUpdate
         }
     }
 
+    public function infoMerge(Personal $personal) {
+        return array_merge($personal->toArray(), $this->filterUselessKey());
+    }
 }

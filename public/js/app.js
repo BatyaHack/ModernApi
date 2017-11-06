@@ -44075,6 +44075,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 axios.put(__WEBPACK_IMPORTED_MODULE_0__utils_other_js__["a" /* CONFIG_URLS */].GET_PERSONAL_URL + '/' + userID, editData).then(function (data) {
                     return data.data;
                 }).then(function (data) {
+                    console.log(data);
                     _this.$emit('correctUser', data);
                     _this.update = false;
                 }).catch(function (err) {

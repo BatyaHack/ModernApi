@@ -52,11 +52,11 @@
                 }
 
                 if(this.firstDataFlag) {
-                    return this.users;
+                   return this.users;
                 }
 
-                let all_key = [];
 
+                let all_key = [];
 
                 let fullUsers = this.users.map((elem, index, arr) => {
 

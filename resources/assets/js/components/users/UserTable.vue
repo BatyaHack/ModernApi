@@ -90,7 +90,6 @@
                 });
 
                 Object.assign(updateUser, user);
-
             },
             deleteUser: function (id) {
 
