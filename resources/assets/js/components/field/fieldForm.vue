@@ -54,7 +54,7 @@
                 validateMessages: {
                     fieldName: {
                         message: 'Не корекнтное имя поля',
-                        regular: /^[a-zA-z]{8,16}$/,
+                        regular: /^[a-zA-z]{1,24}$/,
                     },
                 }
 
@@ -90,6 +90,10 @@
                         };
 
                         return axios.post(CONFIG_URLS.ADD_FIELD_URL, fieldData);
+                    })
+                    .then((data)=> {
+                        console.log(data.data.name);
+                        //window.location.pathname = "/";
                     })
                     .catch((error) => {
                         this.update = false;

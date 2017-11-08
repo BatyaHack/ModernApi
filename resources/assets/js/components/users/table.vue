@@ -6,7 +6,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="user in getUsers" @click="setCurrentUser">
+        <tr v-for="user in users" @click="setCurrentUser">
             <td v-for="data in user">{{data}}</td>
         </tr>
         </tbody>
@@ -43,64 +43,6 @@
                 this.$emit('currentUser', currentUser);
             }
         },
-        computed: {
-            // ЭТО ТАКАЯ ПАРАША ШО Я ...
-            getUsers: function () {
-
-                if (this.users === null) {
-                    return [];
-                }
-
-                if(this.firstDataFlag) {
-                   return this.users;
-                }
-
-
-                let all_key = [];
-
-                let fullUsers = this.users.map((elem, index, arr) => {
-
-                    let self = elem;
-
-                    elem.data.forEach((elem, index, arr) => {
-                        all_key.push(elem.field.name); // заполняю массив всеми кеями что есть
-                    });
-
-                    return self;
-
-                });
-
-                all_key.forEach((elem, index, arr) => {
-
-                    let key = elem;
-
-                    fullUsers.forEach((elem, index, arr) => {
-
-                        elem[key] = ' ';
-
-                    });
-
-                });
-
-                fullUsers.forEach((elem, index, arr) => {
-
-                    let self = elem;
-
-                    elem.data.forEach((elem, index, arr) => {
-
-                        self[elem.field.name] = elem.data;
-
-                    });
-
-                    delete self.data;
-
-                });
-
-                this.firstDataFlag = true;
-                return fullUsers;
-
-            }
-        }
     }
 </script>
 
