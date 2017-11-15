@@ -47,7 +47,6 @@ class PersonalController extends UserController
 
 
         if (empty($request)) {
-            dd('here');
             $current_user = false;
         } else {
             $current_user = $this->getAuthUserHeader($request);
@@ -68,9 +67,7 @@ class PersonalController extends UserController
     public function store(Request $request)
     {
         return DB::transaction(function () use ($request) {
-
             $new_persona = Personal::create($request->all());
-
             $a = new $this->personalHelper($request, $new_persona);
             $a->updateCustomKey();
             return $a->infoMerge($new_persona);
@@ -88,7 +85,10 @@ class PersonalController extends UserController
 
     public function delete(Personal $persona)
     {
-        $persona->delete();
-        return response()->json(null, 200);
+        return DB::transaction(function () use ($persona){
+            Addcol::where('personal_id', $persona->id)->delete();
+            $persona->delete();
+            return response()->json(null, 200);
+        });
     }
 }

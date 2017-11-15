@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Addcol;
 use App\Field;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FieldController extends Controller
 {
@@ -36,10 +38,10 @@ class FieldController extends Controller
     }
 
     public function delete(Field $field) {
-
-        $field->delete();
-
-        return response()->json(null, 200);
-
+        return DB::transaction(function () use ($field) {
+            Addcol::where('field_id', $field->id)->delete();
+            $field->delete();
+            return response()->json(null, 200);
+        });
     }
 }
