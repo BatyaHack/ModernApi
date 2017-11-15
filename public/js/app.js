@@ -798,13 +798,12 @@ function clearData(clearDataArray, objectError) {
     }
 
     setTimeout(function () {
-
         objectError['error'] = false;
-
-        clearDataArray = [];
+        clearDataArray.length = 0; // почему не сробатывает обнуление
+        // через clearDataArray = [];
 
         for (var i = 0; i < objectKey.length; i++) {
-            objectError[i] = false;
+            objectError[objectKey[i]] = false;
         }
     }, 7000);
 }
@@ -43792,6 +43791,8 @@ exports.push([module.i, "\n.user-block {\n  display: -webkit-box;\n  display: -m
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_other_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue__);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 //
@@ -43819,6 +43820,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -43826,13 +43834,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     data: function data() {
         return {
             show: false,
-            user: {}
+            user: {},
+
+            error: false,
+            update: false,
+
+            messageProcess: ['Данные в обработка'],
+            messageError: []
         };
     },
     props: ['fields'],
     methods: {
         sendData: function sendData() {
             var _this = this;
+
+            this.update = true;
 
             var self = this.user;
 
@@ -43842,22 +43858,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             });
 
             axios.post(__WEBPACK_IMPORTED_MODULE_0__utils_other_js__["a" /* CONFIG_URLS */].GET_PERSONAL_URL, this.user).then(function (data) {
-
                 var dataAdapter = {};
-
                 dataAdapter.id = data.data.id;
-
                 for (var item in data.data) {
                     dataAdapter[item] = data.data[item];
                 }
-
                 return dataAdapter;
             }).then(function (data) {
                 return _this.$emit('newUser', data);
-            }).catch(function (err) {
-                return console.log(err);
+            }).catch(function (error) {
+                _this.update = false;
+                _this.error = true;
+                _this.messageError.push(error.message);
+                Object(__WEBPACK_IMPORTED_MODULE_0__utils_other_js__["b" /* clearData */])(_this.messageError, _this, 'update', 'error');
             });
         }
+    },
+    components: {
+        process: __WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue___default.a
     }
 });
 
@@ -43872,6 +43890,14 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("process", {
+        attrs: { update: _vm.error, message: _vm.messageError, error: true }
+      }),
+      _vm._v(" "),
+      _c("process", {
+        attrs: { update: _vm.update, message: _vm.messageProcess }
+      }),
+      _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
         _c(
           "button",
@@ -44048,6 +44074,9 @@ exports.push([module.i, "\n.user-class__info {\n  display: -webkit-box;\n  displ
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_other_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue__);
+//
 //
 //
 //
@@ -44080,11 +44109,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // не становится ли тут компонет завизимым от файла утлиты???
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
             update: false,
             error: false,
+            messageError: [],
+            messageProcess: ['Данные в обработке'],
+
             string: null,
             status: null,
             formStatus: {
@@ -44122,23 +44155,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         console.log('Пропускаю');
                         return;
                     }
-                    console.log(elem.name);
                     editData[elem.name] = elem.value; // ойойоой как уязвимо
                 });
 
                 axios.put(__WEBPACK_IMPORTED_MODULE_0__utils_other_js__["a" /* CONFIG_URLS */].GET_PERSONAL_URL + '/' + userID, editData).then(function (data) {
                     return data.data;
                 }).then(function (data) {
-                    console.log(data);
                     _this.$emit('correctUser', data);
                     _this.update = false;
                 }).catch(function (err) {
                     _this.error = true;
-
-                    setTimeout(function () {
-                        _this.update = false;
-                        _this.error = false;
-                    }, 3000);
+                    _this.messageError.push(err.message);
+                    Object(__WEBPACK_IMPORTED_MODULE_0__utils_other_js__["b" /* clearData */])(_this.messageError, _this, 'update', 'error');
                 });
             } else {
                 this.setStatus(this.formStatus.SEND);
@@ -44165,15 +44193,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.delete(__WEBPACK_IMPORTED_MODULE_0__utils_other_js__["a" /* CONFIG_URLS */].GET_PERSONAL_URL + '/' + this.user.id).then(function () {
                 _this2.update = false;
                 _this2.$emit('deleteUser', _this2.user.id);
-            }).catch(function () {
+            }).catch(function (err) {
                 _this2.error = true;
-                // Перенести в функцию;
-                setTimeout(function () {
-                    _this2.update = false;
-                    _this2.error = false;
-                }, 3000);
+                _this2.messageError.push(err.message);
+                Object(__WEBPACK_IMPORTED_MODULE_0__utils_other_js__["b" /* clearData */])(_this2.messageError, _this2, 'update', 'error');
             });
         }
+    },
+    components: {
+        process: __WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue___default.a
     }
 });
 
@@ -44218,76 +44246,44 @@ var render = function() {
           })
         : _vm._e(),
       _vm._v(" "),
+      _c("process", {
+        attrs: { update: _vm.error, message: _vm.messageError, error: true }
+      }),
+      _vm._v(" "),
+      _c("process", {
+        attrs: { update: _vm.update, message: _vm.messageProcess }
+      }),
+      _vm._v(" "),
       _vm.user && _vm.admin
         ? _c(
             "div",
             { staticClass: "form-group  helper-wrapper  text-center" },
             [
               _c(
-                "p",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.update,
-                      expression: "update"
-                    }
-                  ],
-                  staticClass: "status__text  status__text--success"
-                },
-                [
-                  _c("span", { staticClass: "glyphicon glyphicon-repeat" }),
-                  _vm._v(" Идет обновление данных")
-                ]
+                "button",
+                { staticClass: "btn  btn-primary", on: { click: _vm.send } },
+                [_vm._v(_vm._s(_vm.string))]
               ),
+              _vm._v(" "),
+              _vm.status === _vm.formStatus.SEND
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn  btn-success",
+                      on: { click: _vm.clear }
+                    },
+                    [_vm._v("Отмена")]
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _c(
-                "p",
+                "button",
                 {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.error,
-                      expression: "error"
-                    }
-                  ],
-                  staticClass: "status__text  status__text--error  bg-danger"
+                  staticClass: "btn  btn-danger",
+                  on: { click: _vm.deleteUser }
                 },
-                [
-                  _c("span", { staticClass: "glyphicon glyphicon-remove" }),
-                  _vm._v(" Что что то пошло не так")
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "btn-group" }, [
-                _c(
-                  "button",
-                  { staticClass: "btn  btn-primary", on: { click: _vm.send } },
-                  [_vm._v(_vm._s(_vm.string))]
-                ),
-                _vm._v(" "),
-                _vm.status === _vm.formStatus.SEND
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn  btn-success",
-                        on: { click: _vm.clear }
-                      },
-                      [_vm._v("Отмена")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn  btn-danger",
-                    on: { click: _vm.deleteUser }
-                  },
-                  [_vm._v("Удалить")]
-                )
-              ])
+                [_vm._v("Удалить")]
+              )
             ]
           )
         : _vm._e()

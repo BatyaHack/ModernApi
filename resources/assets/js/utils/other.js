@@ -1,15 +1,13 @@
 export function clearData(clearDataArray, objectError, ...objectKey) {
 
     setTimeout(() => {
-
         objectError['error'] = false;
-
-        clearDataArray = [];
+        clearDataArray.length = 0; // почему не сробатывает обнуление
+                                   // через clearDataArray = [];
 
         for (let i = 0; i < objectKey.length; i++) {
-            objectError[i] = false;
+            objectError[objectKey[i]] = false;
         }
-
     }, 7000);
 
 }

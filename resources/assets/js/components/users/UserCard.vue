@@ -1,40 +1,45 @@
 <template>
     <div class="user-class">
+
         <template v-if="status === formStatus.EDIT">
             <div class="user-class__info" v-for="(info, key) in user">
                 <span class="user-class__key">{{key}}</span>
                 <span class="user-class__value">{{info}}</span>
             </div>
         </template>
+
         <template v-if="status === formStatus.SEND">
             <div class="user-class__info" v-for="(info, key) in user">
                 <span class="user-class__key">{{key}}</span>
                 <input class="input  jsInput  user-class__value" type="text" :name="key" :placeholder="info">
             </div>
         </template>
+
+        <process :update="error" :message="messageError" :error="true"></process>
+        <process :update="update" :message="messageProcess"></process>
+
         <div class="form-group  helper-wrapper  text-center" v-if="user && admin">
-            <p class="status__text  status__text--success" v-show="update"><span
-                    class="glyphicon glyphicon-repeat"></span> Идет обновление данных</p>
-            <p class="status__text  status__text--error  bg-danger" v-show="error"><span
-                    class="glyphicon glyphicon-remove"></span> Что что то пошло не так</p>
-            <div class="btn-group">
-                <button class="btn  btn-primary" @click="send">{{string}}</button>
-                <button v-if="status === formStatus.SEND" class="btn  btn-success" @click="clear">Отмена</button>
-                <button class="btn  btn-danger" @click="deleteUser">Удалить</button>
-            </div>
+            <button class="btn  btn-primary" @click="send">{{string}}</button>
+            <button v-if="status === formStatus.SEND" class="btn  btn-success" @click="clear">Отмена</button>
+            <button class="btn  btn-danger" @click="deleteUser">Удалить</button>
         </div>
+
     </div>
 </template>
 
 <script>
     // не становится ли тут компонет завизимым от файла утлиты???
-    import {CONFIG_URLS} from '../../utils/other.js';
+    import {CONFIG_URLS, clearData} from '../../utils/other.js';
+    import process from '../dateProcess/process.vue';
 
     export default {
         data: function () {
             return {
                 update: false,
                 error: false,
+                messageError: [],
+                messageProcess: ['Данные в обработке'],
+
                 string: null,
                 status: null,
                 formStatus: {
@@ -69,7 +74,6 @@
                             console.log('Пропускаю');
                             return;
                         }
-                        console.log(elem.name);
                         editData[elem.name] = elem.value; // ойойоой как уязвимо
                     });
 
@@ -79,19 +83,14 @@
                             return data.data;
                         })
                         .then((data) => {
-                                console.log(data);
                                 this.$emit('correctUser', data);
                                 this.update = false;
                             }
                         )
                         .catch((err) => {
                             this.error = true;
-
-                            setTimeout(() => {
-                                this.update = false;
-                                this.error = false;
-                            }, 3000);
-
+                            this.messageError.push(err.message);
+                            clearData(this.messageError, this, 'update', 'error');
                         });
                 } else {
                     this.setStatus(this.formStatus.SEND);
@@ -118,15 +117,15 @@
                         this.update = false;
                         this.$emit('deleteUser', this.user.id);
                     })
-                    .catch(() => {
+                    .catch((err) => {
                         this.error = true;
-                        // Перенести в функцию;
-                        setTimeout(() => {
-                            this.update = false;
-                            this.error = false;
-                        }, 3000);
+                        this.messageError.push(err.message);
+                        clearData(this.messageError, this, 'update', 'error');
                     })
             }
+        },
+        components: {
+            process,
         }
     }
 
