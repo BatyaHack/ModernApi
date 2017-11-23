@@ -16,6 +16,7 @@ export const CONFIG_URLS = {
 
     LOGIN_URL: '/api/auth/login',
     REGISTER_URL: '/api/auth/register',
+    GET_AUTH_USER: '/api/auth/check',
     GET_ADMINS_URL: '/api/admins',
     GET_PERSONAL_URL: '/api/personal',
     ADD_FIELD_URL: '/api/field',

@@ -57,7 +57,7 @@ class UserController extends Controller
         }
         return response()->json(compact('token'));
     }
-
+    // проверка существования токена
     public function getAuthUser(Request $request)
     {
         $user = JWTAuth::toUser($request->token);

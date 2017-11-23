@@ -92,8 +92,7 @@
                         return axios.post(CONFIG_URLS.ADD_FIELD_URL, fieldData);
                     })
                     .then((data)=> {
-                        console.log(data.data.name);
-                        //window.location.pathname = "/";
+                        window.location.pathname = "/";
                     })
                     .catch((error) => {
                         this.update = false;

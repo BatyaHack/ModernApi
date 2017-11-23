@@ -8,6 +8,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import routes from './routes.js';
+import {CONFIG_URLS} from './utils/other.js';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -18,6 +19,12 @@ import routes from './routes.js';
 
 Vue.component('homePage', require('./pages/home.vue'));
 
+function chekAusRoute() {
+    return axios.post(`${CONFIG_URLS.GET_AUTH_USER}`, {
+        headers:  {'x-custom-token': localStorage.modernToken}
+    });
+}
+
 const app = new Vue({
     el: '#app',
     data: {
@@ -26,6 +33,7 @@ const app = new Vue({
     computed: {
         viewComputed () {
             const matchingView = routes[this.currentRoute];
+            console.log(chekAusRoute());
             return matchingView
                 ? require('./pages/' + matchingView + '.vue')
                 : require('./pages/404.vue')

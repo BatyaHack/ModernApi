@@ -812,6 +812,7 @@ var CONFIG_URLS = {
 
     LOGIN_URL: '/api/auth/login',
     REGISTER_URL: '/api/auth/register',
+    GET_AUTH_USER: '/api/auth/check',
     GET_ADMINS_URL: '/api/admins',
     GET_PERSONAL_URL: '/api/personal',
     ADD_FIELD_URL: '/api/field'
@@ -1750,6 +1751,7 @@ module.exports = __webpack_require__(137);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_other_js__ = __webpack_require__(4);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -1761,6 +1763,7 @@ __webpack_require__(22);
 window.Vue = __webpack_require__(46);
 
 
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -1768,6 +1771,12 @@ window.Vue = __webpack_require__(46);
  */
 
 Vue.component('homePage', __webpack_require__(16));
+
+function chekAusRoute() {
+    return axios.post('' + __WEBPACK_IMPORTED_MODULE_1__utils_other_js__["a" /* CONFIG_URLS */].GET_AUTH_USER, {
+        headers: { 'x-custom-token': localStorage.modernToken }
+    });
+}
 
 var app = new Vue({
     el: '#app',
@@ -1777,6 +1786,7 @@ var app = new Vue({
     computed: {
         viewComputed: function viewComputed() {
             var matchingView = __WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* default */][this.currentRoute];
+            console.log(chekAusRoute());
             return matchingView ? __webpack_require__(93)("./" + matchingView + '.vue') : __webpack_require__(18);
         }
     },
@@ -46017,8 +46027,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 return axios.post(__WEBPACK_IMPORTED_MODULE_3__utils_other_js__["a" /* CONFIG_URLS */].ADD_FIELD_URL, fieldData);
             }).then(function (data) {
-                console.log(data.data.name);
-                //window.location.pathname = "/";
+                window.location.pathname = "/";
             }).catch(function (error) {
                 _this.update = false;
                 _this.error = true;

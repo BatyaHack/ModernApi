@@ -20,16 +20,15 @@ class PersonalController extends UserController
 
     public function __construct(PersonalUpdate $personal_helper, PersonalGet $personal_get_helper)
     {
-        $this->$personal_helper = $personal_helper;
-        $this->$personal_get_helper = $personal_get_helper;
+        $this->personal_helper = $personal_helper;
+        $this->personal_get_helper = $personal_get_helper;
     }
 
     public function index(Request $request = null)
     {
-        $a = new $this->$personal_get_helper();
+        $a = new $this->personal_get_helper();
         $all_personal = $a->getInfo();
         $columns = array_keys($all_personal[0]);
-
 
         if (empty($request)) {
             $current_user = false;

@@ -16,9 +16,8 @@ use Illuminate\Http\Request;
 
 Route::post('auth/register', 'UserController@register');
 Route::post('auth/login', 'UserController@login');
-Route::group(['middleware' => 'jwt.auth'], function () {
-    Route::get('user', 'UserController@getAuthUser');
-});
+Route::get('user', 'UserController@getAuthUser');
+Route::post('auth/check', 'UserController@getAuthUserHeader');
 
 
 // роуты для работы с админами
