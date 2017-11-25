@@ -8,6 +8,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import routes from './routes.js';
+import {CONFIG_URLS} from './utils/other.js';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -18,6 +19,21 @@ import routes from './routes.js';
 
 Vue.component('homePage', require('./pages/home.vue'));
 
+function chekAusRoute() {
+// TODO метод должен отправлять каждый раз токен на сервер. Получать ответ и обработывать его. Ипспользуем промисы
+
+    axios.get(`${CONFIG_URLS.GET_AUTH_USER}`, {
+        params: {
+            token: localStorage.modernToken,
+        }
+    }).
+        then((data) =>  {
+        console.log(`Че по токена:`)
+        console.dir(data);
+    });
+
+}
+
 const app = new Vue({
     el: '#app',
     data: {
@@ -26,6 +42,7 @@ const app = new Vue({
     computed: {
         viewComputed () {
             const matchingView = routes[this.currentRoute];
+            chekAusRoute();
             return matchingView
                 ? require('./pages/' + matchingView + '.vue')
                 : require('./pages/404.vue')
@@ -36,6 +53,6 @@ const app = new Vue({
     }
 });
 
-window.addEventListener('popstate', () => {
-    app.currentRoute = window.location.pathname;
-});
+// window.addEventListener('popstate', () = > {
+//     app.currentRoute = window.location.pathname;
+// })
