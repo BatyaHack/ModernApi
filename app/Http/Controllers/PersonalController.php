@@ -18,16 +18,30 @@ class PersonalController extends UserController
     protected $personal_helper;
     protected $personal_get_helper;
 
-    public function __construct(PersonalUpdate $personal_helper, PersonalGet $personal_get_helper)
+    public function __construct(PersonalUpdate $personal_helper)
     {
-        $this->$personal_helper = $personal_helper;
-        $this->$personal_get_helper = $personal_get_helper;
+        $this->personal_helper = $personal_helper;
+        //$this->$personal_get_helper = $personal_get_helper;
     }
 
     public function index(Request $request = null)
     {
-        $a = new $this->$personal_get_helper();
-        $all_personal = $a->getInfo();
+        $all_personal = Personal::all()->toArray();
+        $fields = Field::all()->toArray();
+        $add_column = Addcol::all();
+        //немного проблемно с производительностью, но это не точно!
+        foreach ($fields as $field) {
+            foreach ($all_personal as &$persona) {
+                try {
+                    $persona[$field['name']] = $add_column
+                        ->where('field_id', '=', $field['id'])
+                        ->where('personal_id', '=', $persona['id'])
+                        ->pluck('data')[0];
+                } catch (ErrorException $ex) {
+                    $persona[$field['name']] = '';
+                }
+            }
+        }
         $columns = array_keys($all_personal[0]);
 
 
