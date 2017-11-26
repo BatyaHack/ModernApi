@@ -36,7 +36,7 @@
                 <ul class="nav navbar-nav  navbar-right" v-show="checkLogin">
 
                     <li><a href="#">Привет, {{adminName}}</a></li>
-                    <li><a href="#">Выход</a></li>
+                    <li><a href="#" @click.prevent="logout">Выход</a></li>
 
                 </ul>
 
@@ -60,6 +60,13 @@
                 this.checkLogin = isAdmin;
                 this.adminName = data.name;
             })
+        },
+        methods: {
+            logout: function () {
+                localStorage.removeItem('modernToken');
+                location.reload();
+            }
+
         }
     }
 </script>

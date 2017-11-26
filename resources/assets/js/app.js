@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import routes from './routes.js';
+import {routes, authLink} from './routes.js';
 import {CONFIG_URLS} from './utils/other.js';
 
 /**
@@ -19,19 +19,29 @@ import {CONFIG_URLS} from './utils/other.js';
 
 Vue.component('homePage', require('./pages/home.vue'));
 
-function chekAusRoute() {
-// TODO метод должен отправлять каждый раз токен на сервер. Получать ответ и обработывать его. Ипспользуем промисы
+function chekAuthRoute(page = null) {
+// TODO метод должен отправлять каждый раз токен на сервер. Получать ответ и обработывать его.
+// Ипспользуем промисы В качеиве парамертра передаем ссылку на страницу
 
-    axios.get(`${CONFIG_URLS.GET_AUTH_USER}`, {
-        params: {
-            token: localStorage.modernToken,
+    // делаем асинхроный запрос синхроным.
+    // так как хуй знает как рпавильно будет проверять токен
+    // судя по логике проверяем токен. Если такой есть. Окей - иди дальше
+    // нет на регистрацию или 404
+
+    let currentPage = page;
+
+    $.ajax({
+        url: `${CONFIG_URLS.GET_AUTH_USER}?token=${localStorage.modernToken}`,
+        async: false,
+    }).done(() => {
+        currentPage = page;
+    }).fail(() => {
+        if(authLink[page]) {
+            currentPage = `login`
         }
-    }).
-        then((data) =>  {
-        console.log(`Че по токена:`)
-        console.dir(data);
     });
 
+    return currentPage;
 }
 
 const app = new Vue({
@@ -42,9 +52,8 @@ const app = new Vue({
     computed: {
         viewComputed () {
             const matchingView = routes[this.currentRoute];
-            chekAusRoute();
             return matchingView
-                ? require('./pages/' + matchingView + '.vue')
+                ? require('./pages/' + chekAuthRoute(matchingView)+ '.vue')
                 : require('./pages/404.vue')
         }
     },

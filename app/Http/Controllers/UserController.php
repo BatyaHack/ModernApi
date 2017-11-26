@@ -26,7 +26,8 @@ class UserController extends Controller
         $this->user = $user;
     }
 
-    public function index() {
+    public function index()
+    {
         $admins = User::all();
 
         return $admins;
@@ -57,13 +58,29 @@ class UserController extends Controller
         }
         return response()->json(compact('token'));
     }
-    // проверка существования токена
+
+    // проверка существования токена (стандартный метод)
     public function getAuthUser(Request $request)
     {
         $user = JWTAuth::toUser($request->token);
         return response()->json(['result' => $user]);
     }
 
+
+    // для проверки доступа страницы (скорее всего использовать не будем, но пусть весит)
+    public function getAuthUserNoError(Request $request)
+    {
+        try {
+
+            $user = JWTAuth::toUser($request->token);
+        } catch (JWTException $ex) {
+            $user = false;
+        }
+
+        return response()->json(['result' => $user]);
+    }
+
+    // для проверки доступа всего остального
     public function getAuthUserHeader(Request $request)
     {
 
