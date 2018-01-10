@@ -46158,16 +46158,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     props: ['errors', 'value'],
-    watch: {
-        errors: function errors() {
-            this.validation;
-        },
-        value: function value() {
-            console.log('Логин: ', this.value.email);
-            console.log('Пароль: ', this.value.password);
-            this.validation;
-        }
-    },
     computed: {
         validation: function validation() {
             var _this = this;
@@ -46682,7 +46672,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
 
         rulesValidation: function rulesValidation(rules) {
-            console.log('rules: ' + rules);
             this.validate = rules;
         },
 
