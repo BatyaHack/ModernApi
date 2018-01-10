@@ -11,17 +11,24 @@ export default class GoValidator {
 
         const messagesArray = [];
 
-        if ( this._checkResponse() && this._checkStatus() ) {
+        if (this._checkResponse() && this._checkStatus()) {
 
-            for (let key in this.error.response.data) {
+            console.log(this.error);
+            console.dir(this.error);
 
-                for (let err = 0; err < this.error.response.data[key].length; err++) {
-                    messagesArray.push(this.error.response.data[key][err]);
+            if (+this.error.response.status === 422) {
+                messagesArray.push(this.error.response.data[0]);
+            } else {
+                for (let key in this.error.response.data) {
+                    for (let err = 0; err < this.error.response.data[key].length; err++) {
+                        messagesArray.push(this.error.response.data[key][err]);
+                    }
                 }
-
             }
-            // Тут можно убрать else. Если возвращать массив в if, но стоит ли жертвовать логикой ради пары строк???
+
+
         } else {
+            console.log(this.error.message);
             messagesArray.push(this.error.message);
         }
 

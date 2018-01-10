@@ -20,6 +20,8 @@ import {CONFIG_URLS} from './utils/other.js';
 Vue.component('homePage', require('./pages/home.vue'));
 
 function chekAuthRoute(page = null) {
+    console.log('AAAAAAAAAAAAAAAA');
+
 // TODO метод должен отправлять каждый раз токен на сервер. Получать ответ и обработывать его.
 // Ипспользуем промисы В качеиве парамертра передаем ссылку на страницу
 
@@ -32,8 +34,9 @@ function chekAuthRoute(page = null) {
 
     $.ajax({
         url: `${CONFIG_URLS.GET_AUTH_USER}?token=${localStorage.modernToken}`,
-        async: false,
+        // async: false,
     }).done(() => {
+        console.log(1);
         currentPage = page;
     }).fail(() => {
         if(authLink[page]) {

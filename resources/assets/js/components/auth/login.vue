@@ -65,6 +65,7 @@
         methods: {
 
             rulesValidation: function (rules) {
+                console.log('rules: ' + rules);
                 this.validate = rules;
             },
 

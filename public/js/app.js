@@ -1077,14 +1077,20 @@ var GoValidator = function () {
 
             if (this._checkResponse() && this._checkStatus()) {
 
-                for (var key in this.error.response.data) {
+                console.log(this.error);
+                console.dir(this.error);
 
-                    for (var err = 0; err < this.error.response.data[key].length; err++) {
-                        messagesArray.push(this.error.response.data[key][err]);
+                if (+this.error.response.status === 422) {
+                    messagesArray.push(this.error.response.data[0]);
+                } else {
+                    for (var key in this.error.response.data) {
+                        for (var err = 0; err < this.error.response.data[key].length; err++) {
+                            messagesArray.push(this.error.response.data[key][err]);
+                        }
                     }
                 }
-                // Тут можно убрать else. Если возвращать массив в if, но стоит ли жертвовать логикой ради пары строк???
             } else {
+                console.log(this.error.message);
                 messagesArray.push(this.error.message);
             }
 
@@ -1775,6 +1781,8 @@ Vue.component('homePage', __webpack_require__(16));
 function chekAuthRoute() {
     var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
+    console.log('AAAAAAAAAAAAAAAA');
+
     // TODO метод должен отправлять каждый раз токен на сервер. Получать ответ и обработывать его.
     // Ипспользуем промисы В качеиве парамертра передаем ссылку на страницу
 
@@ -1786,9 +1794,10 @@ function chekAuthRoute() {
     var currentPage = page;
 
     $.ajax({
-        url: __WEBPACK_IMPORTED_MODULE_1__utils_other_js__["a" /* CONFIG_URLS */].GET_AUTH_USER + '?token=' + localStorage.modernToken,
-        async: false
+        url: __WEBPACK_IMPORTED_MODULE_1__utils_other_js__["a" /* CONFIG_URLS */].GET_AUTH_USER + '?token=' + localStorage.modernToken
+        // async: false,
     }).done(function () {
+        console.log(1);
         currentPage = page;
     }).fail(function () {
         if (__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* authLink */][page]) {
@@ -46149,18 +46158,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     props: ['errors', 'value'],
+    watch: {
+        errors: function errors() {
+            this.validation;
+        },
+        value: function value() {
+            console.log('Логин: ', this.value.email);
+            console.log('Пароль: ', this.value.password);
+            this.validation;
+        }
+    },
     computed: {
         validation: function validation() {
-            this.$emit('validation', this.isValid());
+            var _this = this;
+
+            // это просто лучший костыль в моей жизни. Мне спева нужно было обработать наличие ошибок
+            // а потом уже эвент о том что данные поменялись
+            setTimeout(function () {
+                _this.$emit('validation', _this.isValid());
+            }, 100);
+
             return this.toCount();
         }
     },
     methods: {
         isValid: function isValid() {
-            var _this = this;
+            var _this2 = this;
 
             return Object.keys(this.validRules).every(function (key) {
-                return _this.validRules[key];
+                return _this2.validRules[key];
             });
         },
         toCount: function toCount() {
@@ -46656,6 +46682,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
 
         rulesValidation: function rulesValidation(rules) {
+            console.log('rules: ' + rules);
             this.validate = rules;
         },
 

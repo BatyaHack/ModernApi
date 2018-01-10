@@ -14,9 +14,24 @@
             }
         },
         props: ['errors', 'value'],
+        watch: {
+            errors: function () {
+                this.validation;
+            },
+            value: function () {
+                console.log('Логин: ', this.value.email);
+                console.log('Пароль: ', this.value.password);
+                this.validation;
+            },
+        },
         computed: {
             validation: function () {
-                this.$emit('validation', this.isValid());
+                // это просто лучший костыль в моей жизни. Мне спева нужно было обработать наличие ошибок
+                // а потом уже эвент о том что данные поменялись
+                setTimeout(() => {
+                    this.$emit('validation', this.isValid());
+                }, 100);
+
                 return this.toCount();
             },
         },
