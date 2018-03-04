@@ -142,5 +142,32 @@
 </script>
 
 <style lang="scss">
+    .text-error {
+        color: red;
+    }
 
+    .status__text {
+
+        &--success {
+            span {
+                animation-name: update;
+                animation-iteration-count: infinite;
+                animation-duration: 1s;
+                animation-timing-function: linear;
+            }
+        }
+
+        &--error {
+
+        }
+    }
+
+    @keyframes update {
+        0% {
+            transform: rotate(0deg)
+        }
+        100% {
+            transform: rotate(360deg)
+        }
+    }
 </style>

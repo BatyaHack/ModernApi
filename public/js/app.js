@@ -43670,8 +43670,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         var token = localStorage.getItem('modernToken');
 
-        console.log(token);
-
         axios({
             method: 'GET',
             url: __WEBPACK_IMPORTED_MODULE_5__utils_other_js__["a" /* CONFIG_URLS */].GET_PERSONAL_URL,
@@ -43681,9 +43679,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }).then(function (data) {
             return data.data;
         }).then(function (data) {
-            console.log(data);
             _this.fields = data.columns;
             _this.users = data[0];
+            _this.currentUser = data[0][0];
 
             if (data.user.original.result) {
                 _this.$root.$emit('someEvent', true, data.user.original.result);
@@ -43694,7 +43692,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             _this.showFind = true;
-        });
+        }).catch(console.error());
     },
 
     components: {
@@ -43825,7 +43823,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.user-block {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  width: 500px;\n  margin: 20px 0;\n}\n.fade-enter-active, .fade-leave-active {\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n", ""]);
+exports.push([module.i, "\n.user-block {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  width: 500px;\n  margin: 20px 0;\n}\n.fade-enter-active, .fade-leave-active {\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to {\n  opacity: 0;\n}\n.btn-to-width {\n  width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -43841,6 +43839,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dateProcess_process_vue__);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+//
 //
 //
 //
@@ -43911,7 +43910,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 }
                 return dataAdapter;
             }).then(function (data) {
-                return _this.$emit('newUser', data);
+                _this.update = false;
+                _this.$emit('newUser', data);
             }).catch(function (error) {
                 _this.update = false;
                 _this.error = true;
@@ -44088,18 +44088,31 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-info",
-            on: {
-              click: function($event) {
-                _vm.show = !_vm.show
-              }
-            }
-          },
-          [_vm._v("Открыть")]
-        )
+        _vm.show
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-info btn-to-width",
+                on: {
+                  click: function($event) {
+                    _vm.show = !_vm.show
+                  }
+                }
+              },
+              [_vm._v("Закрыть")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass: "btn btn-info btn-to-width",
+                on: {
+                  click: function($event) {
+                    _vm.show = !_vm.show
+                  }
+                }
+              },
+              [_vm._v("Открыть")]
+            )
       ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
@@ -44979,7 +44992,7 @@ var render = function() {
       _vm._l(_vm.users, function(user) {
         return _c(
           "tr",
-          { on: { click: _vm.setCurrentUser } },
+          { staticClass: "list-user-item", on: { click: _vm.setCurrentUser } },
           _vm._l(user, function(data) {
             return _c("td", [_vm._v(_vm._s(data))])
           })
@@ -47079,7 +47092,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.text-error {\n  color: red;\n}\n.status__text--success span {\n  -webkit-animation-name: update;\n          animation-name: update;\n  -webkit-animation-iteration-count: infinite;\n          animation-iteration-count: infinite;\n  -webkit-animation-duration: 1s;\n          animation-duration: 1s;\n  -webkit-animation-timing-function: linear;\n          animation-timing-function: linear;\n}\n@-webkit-keyframes update {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes update {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n", ""]);
 
 // exports
 

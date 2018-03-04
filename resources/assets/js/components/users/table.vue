@@ -6,7 +6,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="user in users" @click="setCurrentUser">
+        <tr v-for="user in users" @click="setCurrentUser" class="list-user-item">
             <td v-for="data in user">{{data}}</td>
         </tr>
         </tbody>
@@ -26,7 +26,7 @@
         methods: {
             setCurrentUser: function (evt) {
 
-                const allTr = document.querySelectorAll('tr');
+                var allTr = document.querySelectorAll('tr');
 
                 [...allTr].forEach((elem, index, arr) => {
                     elem.classList.remove('current-user');

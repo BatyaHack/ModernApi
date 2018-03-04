@@ -38,8 +38,6 @@
 
             const token = localStorage.getItem('modernToken');
 
-            console.log(token);
-
             axios({
                 method: 'GET',
                 url: CONFIG_URLS.GET_PERSONAL_URL,
@@ -51,9 +49,9 @@
                     return data.data;
                 })
                 .then((data) => {
-                    console.log(data);
                     this.fields = data.columns;
                     this.users = data[0];
+                    this.currentUser = data[0][0];
 
                     if(data.user.original.result) {
                         this.$root.$emit('someEvent', true, data.user.original.result);
@@ -65,6 +63,7 @@
 
                     this.showFind = true;
                 })
+                .catch(console.error())
         },
         components: {
             UserForm,

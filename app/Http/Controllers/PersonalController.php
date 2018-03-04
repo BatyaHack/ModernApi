@@ -26,10 +26,12 @@ class PersonalController extends UserController
 
     public function index(Request $request = null)
     {
-
+        $columns = ['id', 'name', 'family', 'patronymic', 'created_at', 'updated_at'];
         $a = new $this->personal_get_helper();
         $all_personal = $a->getInfo();
-        $columns = array_keys($all_personal[0]);
+        if(count($all_personal)) {
+            $columns = array_keys($all_personal[0]);
+        }
 
         if (empty($request)) {
             $current_user = false;

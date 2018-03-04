@@ -5,7 +5,8 @@
         <process :update="update" :message="messageProcess"></process>
 
         <div class="form-group">
-            <button class="btn btn-info" @click="show = !show">Открыть</button>
+            <button v-if="show" @click="show = !show" class="btn btn-info btn-to-width">Закрыть</button>
+            <button v-else @click="show = !show" class="btn btn-info btn-to-width">Открыть</button>
         </div>
 
         <transition name="fade">
@@ -67,7 +68,10 @@
                         }
                         return dataAdapter;
                     })
-                    .then((data) => this.$emit('newUser', data))
+                    .then((data) => {
+                        this.update = false;
+                        this.$emit('newUser', data)
+                    })
                     .catch((error) => {
                         this.update = false;
                         this.error = true;
@@ -96,5 +100,9 @@
 
     .fade-enter, .fade-leave-to {
         opacity: 0
+    }
+
+    .btn-to-width {
+        width: 100%;
     }
 </style>
